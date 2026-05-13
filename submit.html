@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit a Request — LAAM Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f3ee;
+  --surface: #ffffff;
+  --surface2: #f0ede6;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.15);
+  --text: #1a1a18;
+  --text2: #6b6860;
+  --text3: #a8a49a;
+  --accent: #1a4a2e;
+  --accent-mid: #2d7a4f;
+  --accent-light: #e8f2ec;
+  --red: #c0392b;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 48px 16px 80px; }
+.page { width: 100%; max-width: 500px; }
+.header { margin-bottom: 36px; }
+.logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--accent); }
+.logo-sub { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.14em; font-family: 'IBM Plex Mono', monospace; margin-top: 3px; }
+h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--text); margin-top: 28px; margin-bottom: 8px; line-height: 1.2; }
+.subtitle { font-size: 14px; color: var(--text2); line-height: 1.6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); }
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.req { color: var(--red); }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,74,46,0.07); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+.form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+.form-select { -webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%23a8a49a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-color:var(--bg);padding-right:32px; }
+.hint { font-size: 11px; color: var(--text3); margin-top: 5px; font-family: 'IBM Plex Mono', monospace; line-height: 1.5; }
+.divider { height: 1px; background: var(--border); margin: 22px 0; }
+.priority-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.p-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; }
+.p-opt { position: relative; }
+.p-lbl { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 11px 6px; border-radius: var(--radius); border: 1px solid var(--border); cursor: pointer; transition: all 0.12s; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text2); }
+.p-lbl:hover { border-color: var(--border2); background: var(--surface2); }
+.p-opt input:checked + .p-lbl { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 500; }
+.pdot { width: 8px; height: 8px; border-radius: 50%; }
+.submit-btn { width: 100%; padding: 13px; border-radius: var(--radius); background: var(--accent); color: #fff; font-size: 14px; font-weight: 600; font-family: 'Fraunces', serif; border: none; cursor: pointer; transition: background 0.15s; letter-spacing: 0.01em; }
+.submit-btn:hover { background: var(--accent-mid); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.success { display: none; text-align: center; padding: 44px 20px; }
+.success-ring { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); border: 1px solid rgba(26,74,46,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+.success h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.success p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.another { margin-top: 20px; padding: 9px 20px; border-radius: var(--radius); background: transparent; border: 1px solid var(--border2); color: var(--text); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; }
+.another:hover { background: var(--surface2); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="logo">LAAM</div>
+    <div class="logo-sub">Analytics Team</div>
+    <h1>Submit an analytics request</h1>
+    <p class="subtitle">Need a report, dashboard, or analysis? Describe what you need below and the analytics team will triage it based on priority and capacity.</p>
+  </div>
+  <div class="card">
+    <div id="form-wrap">
+      <div class="form-group">
+        <label class="form-label">Your name <span class="req">*</span></label>
+        <input class="form-input" id="s-name" type="text" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your team <span class="req">*</span></label>
+        <select class="form-select" id="s-team">
+          <option value="">Select your team</option>
+          <option>Marketing</option><option>Product & Eng</option><option>Growth</option>
+          <option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option>
+        </select>
+      </div>
+      <div class="divider"></div>
+      <div class="form-group">
+        <label class="form-label">Request title <span class="req">*</span></label>
+        <input class="form-input" id="s-title" type="text" placeholder="e.g. Monthly revenue breakdown by channel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description & context <span class="req">*</span></label>
+        <textarea class="form-textarea" id="s-desc" placeholder="What do you need and why? Include time period, relevant data sources, comparisons, and what decision this will inform."></textarea>
+        <div class="hint">The more context, the faster we can deliver.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Priority <span class="req">*</span></label>
+        <div class="priority-grid">
+          <div class="p-opt"><input type="radio" name="prio" id="pr-c" value="Critical"><label class="p-lbl" for="pr-c"><span class="pdot" style="background:#c0392b"></span>Critical</label></div>
+          <div class="p-opt"><input type="radio" name="prio" id="pr-h" value="High" checked><label class="p-lbl" for="pr-h"><span class="pdot" style="background:#b8621a"></span>High</label></div>
+          <div class="p-opt"><input type="radio" name="prio" id="pr-m" value="Medium"><label class="p-lbl" for="pr-m"><span class="pdot" style="background:#1a3a6b"></span>Medium</label></div>
+          <div class="p-opt"><input type="radio" name="prio" id="pr-l" value="Low"><label class="p-lbl" for="pr-l"><span class="pdot" style="background:#a8a49a"></span>Low</label></div>
+        </div>
+        <div class="hint" style="margin-top:8px">Critical = business-blocking · High = needed within a week · Medium = planned · Low = nice to have</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Desired deadline</label>
+        <input class="form-input" id="s-due" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preferred output</label>
+        <select class="form-select" id="s-format">
+          <option value="">No preference</option>
+          <option>Dashboard / chart</option><option>Spreadsheet / CSV</option>
+          <option>Written report</option><option>Presentation slide</option>
+          <option>Raw data pull</option><option>Other</option>
+        </select>
+      </div>
+      <button class="submit-btn" id="sub-btn" onclick="submit()">Submit request →</button>
+    </div>
+    <div class="success" id="success-wrap">
+      <div class="success-ring">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#1a4a2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2>Request submitted!</h2>
+      <p>The analytics team has received your request and will be in touch once it's been triaged. You'll be contacted when work begins or if we need more information.</p>
+      <button class="another" onclick="reset()">Submit another request</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+let sb = null;
+let demo = typeof SUPABASE_URL === 'undefined' || SUPABASE_URL.includes('YOUR_');
+
+if (!demo) {
+  const s = document.createElement('script');
+  s.src = SUPABASE_CDN;
+  s.onload = () => { try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e){demo=true;} };
+  document.head.appendChild(s);
+}
+
+async function submit() {
+  const name = document.getElementById('s-name').value.trim();
+  const team = document.getElementById('s-team').value;
+  const title = document.getElementById('s-title').value.trim();
+  const desc = document.getElementById('s-desc').value.trim();
+  const prio = document.querySelector('input[name="prio"]:checked')?.value || 'Medium';
+  if (!name||!team||!title||!desc) { alert('Please fill in all required fields.'); return; }
+  const btn = document.getElementById('sub-btn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  const data = { title, description:desc, team, priority:prio,
+    status:'New', assignee:'Unassigned',
+    due_date:document.getElementById('s-due').value||null,
+    format:document.getElementById('s-format').value||null,
+    submitter:name, comments:[],
+    ticket_id:'LAAM-'+String(Date.now()).slice(-6) };
+  if (!demo && sb) {
+    const {error} = await sb.from('tickets').insert(data);
+    if (error) { alert('Error: '+error.message); btn.disabled=false; btn.textContent='Submit request →'; return; }
+  }
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('success-wrap').style.display='block';
+}
+
+function reset(){
+  document.getElementById('form-wrap').style.display='block';
+  document.getElementById('success-wrap').style.display='none';
+  ['s-name','s-title','s-desc','s-due'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-team').value='';
+  document.getElementById('s-format').value='';
+  document.getElementById('pr-h').checked=true;
+  const btn=document.getElementById('sub-btn');
+  btn.disabled=false; btn.textContent='Submit request →';
+}
+</script>
+</body>
+</html>
