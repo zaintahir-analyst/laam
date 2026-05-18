@@ -16,7 +16,7 @@ create table if not exists public.tickets (
   due_date      date,
   submitter     text,
   format        text,
-  deparment     text not null check (department in ('Growth','Commercials','Marketing','Finance', 'Product & Engineering','Experience','Sucsel')),
+  department     text not null check (department in ('Growth','Commercials','Marketing','Finance', 'Product & Engineering','Experience','Sucsel')),
   comments      jsonb default '[]'::jsonb,
   created_at    timestamptz default now()
 );
