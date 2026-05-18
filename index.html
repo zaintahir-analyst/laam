@@ -9,8 +9,8 @@
 :root {
   --bg: #f5f3ee; --surface: #ffffff; --surface2: #f0ede6; --surface3: #e8e4db; --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
   --text: #1a1a18; --text2: #6b6860; --text3: #a8a49a; --accent: #1a4a2e; --accent-light: #e8f2ec; --accent-mid: #2d7a4f;
-  --radius: 8px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
   --red: #c0392b; --red-light: #fdf0ee; --amber: #b8621a; --amber-light: #fef5ec; --blue: #1a3a6b; --blue-light: #eef3fc; --green: #1a4a2e; --green-light: #e8f2ec; --purple: #4a1a6b; --purple-light: #f3eef8;
+  --radius: 8px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
@@ -52,10 +52,11 @@ td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px
 tr:hover td { background: var(--bg); }
 .ticket-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); }
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
-.p-critical { background: var(--red-light); color: var(--red); }
-.p-high { background: var(--amber-light); color: var(--amber); }
-.p-medium { background: var(--blue-light); color: var(--blue); }
-.p-low { background: var(--surface2); color: var(--text3); }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.p-critical { background: var(--red-light); color: var(--red); } .p-critical .badge-dot { background: var(--red); }
+.p-high { background: var(--amber-light); color: var(--amber); } .p-high .badge-dot { background: var(--amber); }
+.p-medium { background: var(--blue-light); color: var(--blue); } .p-medium .badge-dot { background: var(--blue); }
+.p-low { background: var(--surface2); color: var(--text3); } .p-low .badge-dot { background: var(--text3); }
 .s-new { background: var(--accent-light); color: var(--accent); }
 .s-progress { background: var(--purple-light); color: var(--purple); }
 .s-review { background: var(--amber-light); color: var(--amber); }
@@ -79,7 +80,7 @@ tr:hover td { background: var(--bg); }
 .k-empty { font-size: 11px; color: var(--text3); text-align: center; padding: 14px 0; font-family: 'IBM Plex Mono', monospace; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); }
+.modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); overflow-y:auto; max-height:95vh; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
 .modal-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
 .modal-close { cursor: pointer; background: transparent; border: none; font-size: 20px; }
@@ -108,22 +109,39 @@ tr:hover td { background: var(--bg); }
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Views</div>
-    <div class="nav-item active" onclick="setView('dashboard',this)">Dashboard</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="setView('dashboard',this)">Dashboard</div>
     <div class="nav-item" id="nav-all" onclick="setView('all',this)">All requests <span class="nav-badge" id="badge-all">0</span></div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">By priority</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Critical',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--red)"></span>Critical</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','High',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber)"></span>High</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Medium',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue)"></span>Medium</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Low',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--text3)"></span>Low</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">By team</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Marketing',this)">Marketing</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Product & Eng',this)">Product & Eng</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Growth',this)">Growth</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Commercials',this)">Commercials</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Finance',this)">Finance</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Experience',this)">Experience</div>
+    <div class="nav-item" onclick="setQuickFilter('team','Warehouse',this)">Warehouse</div>
   </div>
   <div class="sidebar-footer">
     <div class="status-row">
       <span class="status-dot" id="status-dot"></span>
       <span id="status-text">Connecting…</span>
     </div>
-    <button class="share-btn" onclick="window.open('submit.html','_blank')">Intake Form ↗</button>
+    <button class="share-btn" onclick="window.open('submit.html','_blank')" style="background-color: #1a4a2e;">Share intake form</button>
   </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
     <div class="page-title" id="page-title">Dashboard</div>
-    <button class="btn btn-primary" onclick="openNew()">+ New Request</button>
+    <button class="btn btn-primary" onclick="openNew()" style="background-color: #1a4a2e; border-color: #1a4a2e;">+ New request</button>
   </div>
   <div class="content">
 
@@ -142,6 +160,8 @@ tr:hover td { background: var(--bg); }
 
     <div class="view-section" id="view-all">
       <div class="filters-bar">
+        <select id="f-team" onchange="render()"><option value="">All Teams</option><option>Marketing</option><option>Product & Eng</option><option>Growth</option><option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option></select>
+        <select id="f-priority" onchange="render()"><option value="">All Priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
         <select id="f-assignee" onchange="render()"><option value="">All Assignees</option><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select>
         <div class="view-toggle">
           <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
@@ -224,7 +244,7 @@ tr:hover td { background: var(--bg); }
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null; 
 let tickets = [];
-let subView = 'table';
+let currentView = 'dashboard';
 
 async function init() {
   const script = document.createElement('script');
@@ -257,11 +277,15 @@ function setStatus(s, txt) {
 function render() {
   const dashTbody = document.getElementById('dash-tbody');
   const allTbody = document.getElementById('all-tbody');
-  const selectedAssigneeFilter = document.getElementById('f-assignee').value;
   
-  // Apply visual filtering logic
+  const fTeam = document.getElementById('f-team').value;
+  const fPriority = document.getElementById('f-priority').value;
+  const fAssignee = document.getElementById('f-assignee').value;
+  
   const filteredTickets = tickets.filter(t => {
-    if (selectedAssigneeFilter && t.assignee !== selectedAssigneeFilter) return false;
+    if (fTeam && t.team !== fTeam) return false;
+    if (fPriority && t.priority !== fPriority) return false;
+    if (fAssignee && t.assignee !== fAssignee) return false;
     return true;
   });
   
@@ -269,7 +293,7 @@ function render() {
     <td><span class="ticket-id">${t.ticket_id}</span></td>
     <td><strong>${esc(t.title)}</strong><br><small>${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${t.team}</span></td>
-    <td><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span></td>
+    <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
     <td><span class="badge s-${t.status.toLowerCase().replace(' ', '')}">${t.status}</span></td>
     <td>${t.assignee || 'Unassigned'}</td>
     <td><code style="font-size:12px">${t.due_date || '—'}</code></td>
@@ -337,9 +361,7 @@ function openEdit(id) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
   
-  // Force clean numeric assignment to hidden DOM element to stop duplicates
   document.getElementById('edit-id').value = t.id;
-  
   document.getElementById('fi-title').value = t.title;
   document.getElementById('fi-desc').value = t.description || '';
   document.getElementById('fi-team').value = t.team;
@@ -385,11 +407,17 @@ async function save() {
     format: document.getElementById('fi-format').value
   };
 
-  // Explicit string mapping validation check to route update vs creation queries safely
   if (activeRecordId && activeRecordId.trim() !== "") {
+    // Explicit overwrite via ID routing ensures rows don't duplicate on save
     await sb.from('tickets').update(data).eq('id', parseInt(activeRecordId, 10));
     if (document.getElementById('fi-notify').checked) {
-      console.log(`[UPDATED EMAIL ALERT] Status modified to "${data.status}". Update fired to ${data.email}, zain@laam.pk, zarrar@laam.pk`);
+      try {
+        await fetch(`https://formsubmit.co/ajax/${data.email}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "Status Update": `Your request has been set to "${data.status}".`, "_subject": `[LAAM Analytics] Status Updated` })
+        });
+      } catch(e){}
     }
   } else {
     const tid = 'LAAM-' + String(Date.now()).slice(-6);
@@ -405,6 +433,21 @@ function setView(v, el) {
   el.classList.add('active');
   document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
   document.getElementById('view-' + v).classList.add('active');
+  document.getElementById('page-title').textContent = v === 'dashboard' ? 'Dashboard' : 'All Requests';
+}
+
+function setQuickFilter(field, val, el) {
+  setView('all', document.getElementById('nav-all'));
+  if (field === 'priority') {
+    document.getElementById('f-priority').value = val;
+    document.getElementById('f-team').value = '';
+  } else {
+    document.getElementById('f-team').value = val;
+    document.getElementById('f-priority').value = '';
+  }
+  document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  render();
 }
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
