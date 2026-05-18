@@ -40,6 +40,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); }
 .stat-label { font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
 .stat-value { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; margin-top: 4px; }
+.filters-bar { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+.view-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; gap: 2px; margin-left: auto; }
+.view-btn { padding: 4px 10px; border-radius: 6px; border: none; background: transparent; color: var(--text3); cursor: pointer; font-size: 12px; }
+.view-btn.active { background: var(--surface2); color: var(--text); font-weight: 500; }
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
 table { width: 100%; border-collapse: collapse; }
 thead { background: var(--surface2); }
@@ -61,6 +65,18 @@ tr:hover td { background: var(--bg); }
 .row-actions { display: flex; gap: 4px; }
 .icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: transparent; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; }
 .icon-btn:hover { background: var(--surface2); }
+.kanban-board { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; align-items: start; }
+.k-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+.k-header { padding: 11px 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface2); }
+.k-title { font-size: 11px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; color: var(--text2); font-weight: 500; }
+.k-count { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); background: var(--surface); padding: 2px 6px; border-radius: 20px; border: 1px solid var(--border); }
+.k-body { padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 50px; }
+.k-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 11px; cursor: pointer; transition: all 0.12s; box-shadow: var(--shadow); }
+.k-card:hover { border-color: var(--border2); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.k-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 7px; line-height: 1.4; }
+.k-card-meta { display: flex; justify-content: space-between; align-items: center; gap: 5px; }
+.k-card-team { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+.k-empty { font-size: 11px; color: var(--text3); text-align: center; padding: 14px 0; font-family: 'IBM Plex Mono', monospace; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); }
@@ -119,15 +135,27 @@ tr:hover td { background: var(--bg); }
         <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="stat-done">0</div></div>
       </div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Actions</th></tr></thead>
+        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Expected Date</th><th>Actions</th></tr></thead>
         <tbody id="dash-tbody"></tbody></table>
       </div>
     </div>
 
     <div class="view-section" id="view-all">
-      <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Actions</th></tr></thead>
-        <tbody id="all-tbody"></tbody></table>
+      <div class="filters-bar">
+        <select id="f-assignee" onchange="render()"><option value="">All Assignees</option><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
+          <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
+        </div>
+      </div>
+      <div id="sub-table">
+        <div class="table-wrap">
+          <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Expected Date</th><th>Actions</th></tr></thead>
+          <tbody id="all-tbody"></tbody></table>
+        </div>
+      </div>
+      <div id="sub-kanban" style="display:none">
+        <div class="kanban-board" id="kanban-board"></div>
       </div>
     </div>
 
@@ -153,11 +181,22 @@ tr:hover td { background: var(--bg); }
       <div class="form-group"><label class="form-label">Status</label>
         <select class="form-select" id="fi-status"><option>New</option><option>In Progress</option><option>Review</option><option>Blocked</option><option>Done</option></select></div>
       <div class="form-group"><label class="form-label">Assignee</label>
-        <select class="form-select" id="fi-assignee"><option>Unassigned</option><option>You</option><option>Manager</option></select></div>
+        <select class="form-select" id="fi-assignee"><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Submitted By</label><input class="form-input" id="fi-submitter"></div>
       <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="fi-email" type="email"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Expected Date</label><input class="form-input" type="date" id="fi-due"></div>
+      <div class="form-group"><label class="form-label">Request Type</label>
+        <select class="form-select" id="fi-format">
+          <option value="New Dashboard">New Dashboard</option>
+          <option value="Dashboard Modifications">Dashboard Modifications</option>
+          <option value="Data Discrepancy Troubleshooting">Data Discrepancy Troubleshooting</option>
+          <option value="Data Dump">Data Dump</option>
+          <option value="Other">Other</option>
+        </select></div>
     </div>
     <div class="notify-box">
       <input type="checkbox" id="fi-notify" checked>
@@ -185,7 +224,7 @@ tr:hover td { background: var(--bg); }
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null; 
 let tickets = [];
-let editId = null;
+let subView = 'table';
 
 async function init() {
   const script = document.createElement('script');
@@ -218,28 +257,60 @@ function setStatus(s, txt) {
 function render() {
   const dashTbody = document.getElementById('dash-tbody');
   const allTbody = document.getElementById('all-tbody');
+  const selectedAssigneeFilter = document.getElementById('f-assignee').value;
   
-  const html = tickets.map(t => `<tr>
+  // Apply visual filtering logic
+  const filteredTickets = tickets.filter(t => {
+    if (selectedAssigneeFilter && t.assignee !== selectedAssigneeFilter) return false;
+    return true;
+  });
+  
+  const generateRowHtml = (t) => `<tr>
     <td><span class="ticket-id">${t.ticket_id}</span></td>
     <td><strong>${esc(t.title)}</strong><br><small>${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${t.team}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span></td>
     <td><span class="badge s-${t.status.toLowerCase().replace(' ', '')}">${t.status}</span></td>
     <td>${t.assignee || 'Unassigned'}</td>
+    <td><code style="font-size:12px">${t.due_date || '—'}</code></td>
     <td>
       <button class="icon-btn" onclick="openDetail(${t.id})">👁</button>
       <button class="icon-btn" onclick="openEdit(${t.id})">✎</button>
     </td>
-  </tr>`).join('');
+  </tr>`;
 
-  dashTbody.innerHTML = html;
-  allTbody.innerHTML = html;
+  dashTbody.innerHTML = tickets.map(generateRowHtml).join('');
+  allTbody.innerHTML = filteredTickets.map(generateRowHtml).join('');
+  
+  renderKanban(filteredTickets);
   
   document.getElementById('stat-total').textContent = tickets.length;
   document.getElementById('stat-progress').textContent = tickets.filter(t => t.status === 'In Progress').length;
   document.getElementById('stat-urgent').textContent = tickets.filter(t => t.priority === 'Critical' || t.priority === 'High').length;
   document.getElementById('stat-done').textContent = tickets.filter(t => t.status === 'Done').length;
   document.getElementById('badge-all').textContent = tickets.length;
+}
+
+function renderKanban(filteredList) {
+  const columns = ['New', 'In Progress', 'Review', 'Blocked', 'Done'];
+  document.getElementById('kanban-board').innerHTML = columns.map(col => {
+    const cards = filteredList.filter(t => t.status === col);
+    return `<div class="k-col">
+      <div class="k-header"><span class="k-title">${col}</span><span class="k-count">${cards.length}</span></div>
+      <div class="k-body">${cards.length ? cards.map(t => `<div class="k-card" onclick="openDetail(${t.id})">
+        <div class="k-card-title">${esc(t.title)}</div>
+        <div class="k-card-meta"><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span><span class="k-card-team">${esc(t.team)}</span></div>
+      </div>`).join('') : '<div class="k-empty">empty</div>'}</div>
+    </div>`;
+  }).join('');
+}
+
+function setSubView(v, btn) {
+  subView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sub-table').style.display = v === 'table' ? 'block' : 'none';
+  document.getElementById('sub-kanban').style.display = v === 'kanban' ? 'block' : 'none';
 }
 
 function openDetail(id) {
@@ -254,6 +325,8 @@ function openDetail(id) {
       <div><div class="detail-label">Priority</div><div class="detail-value">${t.priority}</div></div>
       <div><div class="detail-label">Status</div><div class="detail-value">${t.status}</div></div>
       <div><div class="detail-label">Assignee</div><div class="detail-value">${t.assignee}</div></div>
+      <div><div class="detail-label">Expected Date</div><div class="detail-value"><code>${t.due_date || '—'}</code></div></div>
+      <div><div class="detail-label">Request Type</div><div class="detail-value">${t.format || '—'}</div></div>
     </div>
     <div class="detail-label">Description</div><div class="detail-value">${esc(t.description || 'No description provided')}</div>
   `;
@@ -263,7 +336,10 @@ function openDetail(id) {
 function openEdit(id) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
-  editId = id;
+  
+  // Force clean numeric assignment to hidden DOM element to stop duplicates
+  document.getElementById('edit-id').value = t.id;
+  
   document.getElementById('fi-title').value = t.title;
   document.getElementById('fi-desc').value = t.description || '';
   document.getElementById('fi-team').value = t.team;
@@ -272,19 +348,30 @@ function openEdit(id) {
   document.getElementById('fi-assignee').value = t.assignee || 'Unassigned';
   document.getElementById('fi-submitter').value = t.submitter;
   document.getElementById('fi-email').value = t.email || '';
+  document.getElementById('fi-due').value = t.due_date || '';
+  document.getElementById('fi-format').value = t.format || 'New Dashboard';
+  document.getElementById('form-title').textContent = 'Edit Request';
   document.getElementById('modal-form').classList.add('open');
 }
 
 function openNew() {
-  editId = null;
+  document.getElementById('edit-id').value = '';
   document.getElementById('fi-title').value = '';
   document.getElementById('fi-desc').value = '';
   document.getElementById('fi-submitter').value = '';
   document.getElementById('fi-email').value = '';
+  document.getElementById('fi-due').value = '';
+  document.getElementById('fi-team').value = 'Marketing';
+  document.getElementById('fi-priority').value = 'High';
+  document.getElementById('fi-status').value = 'New';
+  document.getElementById('fi-assignee').value = 'Unassigned';
+  document.getElementById('fi-format').value = 'New Dashboard';
+  document.getElementById('form-title').textContent = 'Create Request';
   document.getElementById('modal-form').classList.add('open');
 }
 
 async function save() {
+  const activeRecordId = document.getElementById('edit-id').value;
   const data = {
     title: document.getElementById('fi-title').value,
     description: document.getElementById('fi-desc').value,
@@ -293,13 +380,16 @@ async function save() {
     status: document.getElementById('fi-status').value,
     assignee: document.getElementById('fi-assignee').value,
     submitter: document.getElementById('fi-submitter').value,
-    email: document.getElementById('fi-email').value
+    email: document.getElementById('fi-email').value,
+    due_date: document.getElementById('fi-due').value || null,
+    format: document.getElementById('fi-format').value
   };
 
-  if (editId) {
-    await sb.from('tickets').update(data).eq('id', editId);
+  // Explicit string mapping validation check to route update vs creation queries safely
+  if (activeRecordId && activeRecordId.trim() !== "") {
+    await sb.from('tickets').update(data).eq('id', parseInt(activeRecordId, 10));
     if (document.getElementById('fi-notify').checked) {
-      console.log(`%c[EMAIL NOTIFICATION DISPATCHED] Sent to: ${data.email} confirming modification status "${data.status}".`, "color: #b8621a; font-weight: bold;");
+      console.log(`[UPDATED EMAIL ALERT] Status modified to "${data.status}". Update fired to ${data.email}, zain@laam.pk, zarrar@laam.pk`);
     }
   } else {
     const tid = 'LAAM-' + String(Date.now()).slice(-6);
