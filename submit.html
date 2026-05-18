@@ -129,7 +129,7 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#1a4a2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <h2>Request submitted!</h2>
-      <p id="success-msg">The analytics team has received your request.</p>
+      <p id="success-msg"></p>
       <button class="another" onclick="reset()">Submit another request</button>
     </div>
   </div>
@@ -147,29 +147,41 @@ if (typeof window.SUPABASE_URL !== 'undefined') {
   document.head.appendChild(s);
 }
 
-// Global automated email workflow handler
-async function dispatchEmailNotification(ticketId, requesterEmail, title, team) {
-  const subject = `[LAAM Analytics] Request Filed: ${ticketId}`;
-  const body = `Hi,\n\nYour analytics request "${title}" has been received with ID: ${ticketId}.\n\nBest,\nAnalytics Team`;
-  
-  // Requester notification simulation log
-  console.log(`[EMAIL DISPATCH] To Requester: ${requesterEmail} | Subject: ${subject}`);
-  
-  // Internal notifications loop logic
-  const internalRecipients = ["zain@laam.pk", "zarrar@laam.pk"];
-  // const alternativeBackupPlaceholder = "backup-tracker@laam.pk"; // commented out optional monitoring placeholder
-  
-  internalRecipients.forEach(email => {
-    console.log(`[INTERNAL ALERT DISPATCH] Sent to team monitoring node: ${email} for ticket ${ticketId}`);
-  });
+async function sendEmailAlerts(ticketId, submitterName, submitterEmail, title, description, team, priority, dueDate, formatType) {
+  try {
+    // Sends fully compiled email notification directly to Zain
+    await fetch('https://formsubmit.co/ajax/zain.tahir@laam.pk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        "New Ticket ID": ticketId,
+        "Submitted By": `${submitterName} (${submitterEmail})`,
+        "Team Dropdown": team,
+        "Request Title": title,
+        "Description": description,
+        "Priority Tier": priority,
+        "Expected Date": dueDate || 'None Provided',
+        "Request Type": formatType,
+        "_subject": `[LAAM Analytics] New Request Filed: ${ticketId}`
+      })
+    });
 
-  /* To switch on production cloud delivery via EmailJS or Resend link, utilize this drop-in block:
-  fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_API_KEY' },
-    body: JSON.stringify({ from: 'analytics@laam.pk', to: [requesterEmail, 'zain@laam.pk', 'zarrar@laam.pk'], subject: subject, text: body })
-  });
-  */
+    // Automatically dispatches a clean verification email copy straight to the requester
+    await fetch(`https://formsubmit.co/ajax/${submitterEmail}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        "Ticket ID": ticketId,
+        "Hello": submitterName,
+        "Message": "Your analytics request has been successfully filed. The data tracking team will review your parameters shortly.",
+        "Request Title": title,
+        "Expected Date": dueDate || 'None Provided',
+        "_subject": `[LAAM Analytics] Request Received Confirmation — ${ticketId}`
+      })
+    });
+  } catch(e) {
+    console.log("Email dispatch service offline:", e);
+  }
 }
 
 async function submit() {
@@ -179,6 +191,8 @@ async function submit() {
   const title = document.getElementById('s-title').value.trim();
   const desc = document.getElementById('s-desc').value.trim();
   const prio = document.querySelector('input[name="prio"]:checked')?.value || 'Medium';
+  const due = document.getElementById('s-due').value || null;
+  const format = document.getElementById('s-format').value;
   
   if (!name || !email || !team || !title || !desc) { alert('Please fill in all required fields.'); return; }
   
@@ -189,22 +203,18 @@ async function submit() {
   
   const data = { 
     title, description: desc, team, priority: prio,
-    status: 'New', assignee: 'Unassigned',
-    due_date: document.getElementById('s-due').value || null,
-    format: document.getElementById('s-format').value,
-    submitter: name, email: email, comments: [],
-    ticket_id: generatedTicketId 
+    status: 'New', assignee: 'Unassigned', due_date: due, format,
+    submitter: name, email: email, comments: [], ticket_id: generatedTicketId 
   };
 
   if (sb) {
     const { error } = await sb.from('tickets').insert(data);
     if (error) { alert('Error: ' + error.message); btn.disabled = false; btn.textContent = 'Submit request →'; return; }
     
-    // Fire real-time notification routines
-    await dispatchEmailNotification(generatedTicketId, email, title, team);
+    await sendEmailAlerts(generatedTicketId, name, email, title, desc, team, prio, due, format);
   }
 
-  document.getElementById('success-msg').innerHTML = `Your request has been filed with **Ticket ID: ${generatedTicketId}**. Alerts have been sent to <strong>${email}</strong>, Zain, and Zarrar.`;
+  document.getElementById('success-msg').innerHTML = `The analytics team has received your request and will be in touch once it has been triaged. You can track this request using **Ticket ID: ${generatedTicketId}**.`;
   document.getElementById('form-wrap').style.display = 'none';
   document.getElementById('success-wrap').style.display = 'block';
 }
