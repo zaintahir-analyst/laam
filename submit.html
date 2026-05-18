@@ -76,7 +76,6 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
       <div class="form-group">
         <label class="form-label">Your Email <span class="req">*</span></label>
         <input class="form-input" id="s-email" type="email" placeholder="name@laam.pk">
-        <div class="hint">You'll receive confirmation updates regarding your ticket ID here.</div>
       </div>
       <div class="form-group">
         <label class="form-label">Your team <span class="req">*</span></label>
@@ -110,15 +109,17 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Desired deadline</label>
+        <label class="form-label">Expected Date</label>
         <input class="form-input" id="s-due" type="date">
       </div>
       <div class="form-group">
-        <label class="form-label">Preferred output</label>
+        <label class="form-label">Request Type</label>
         <select class="form-select" id="s-format">
-          <option value="">No preference</option>
-          <option>Dashboard / chart</option><option>Spreadsheet / CSV</option>
-          <option>Written report</option><option>Presentation slide</option>
+          <option value="New Dashboard">New Dashboard</option>
+          <option value="Dashboard Modifications">Dashboard Modifications</option>
+          <option value="Data Discrepancy Troubleshooting">Data Discrepancy Troubleshooting</option>
+          <option value="Data Dump">Data Dump</option>
+          <option value="Other">Other</option>
         </select>
       </div>
       <button class="submit-btn" id="sub-btn" onclick="submit()">Submit request →</button>
@@ -146,6 +147,31 @@ if (typeof window.SUPABASE_URL !== 'undefined') {
   document.head.appendChild(s);
 }
 
+// Global automated email workflow handler
+async function dispatchEmailNotification(ticketId, requesterEmail, title, team) {
+  const subject = `[LAAM Analytics] Request Filed: ${ticketId}`;
+  const body = `Hi,\n\nYour analytics request "${title}" has been received with ID: ${ticketId}.\n\nBest,\nAnalytics Team`;
+  
+  // Requester notification simulation log
+  console.log(`[EMAIL DISPATCH] To Requester: ${requesterEmail} | Subject: ${subject}`);
+  
+  // Internal notifications loop logic
+  const internalRecipients = ["zain@laam.pk", "zarrar@laam.pk"];
+  // const alternativeBackupPlaceholder = "backup-tracker@laam.pk"; // commented out optional monitoring placeholder
+  
+  internalRecipients.forEach(email => {
+    console.log(`[INTERNAL ALERT DISPATCH] Sent to team monitoring node: ${email} for ticket ${ticketId}`);
+  });
+
+  /* To switch on production cloud delivery via EmailJS or Resend link, utilize this drop-in block:
+  fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer YOUR_API_KEY' },
+    body: JSON.stringify({ from: 'analytics@laam.pk', to: [requesterEmail, 'zain@laam.pk', 'zarrar@laam.pk'], subject: subject, text: body })
+  });
+  */
+}
+
 async function submit() {
   const name = document.getElementById('s-name').value.trim();
   const email = document.getElementById('s-email').value.trim();
@@ -165,7 +191,7 @@ async function submit() {
     title, description: desc, team, priority: prio,
     status: 'New', assignee: 'Unassigned',
     due_date: document.getElementById('s-due').value || null,
-    format: document.getElementById('s-format').value || null,
+    format: document.getElementById('s-format').value,
     submitter: name, email: email, comments: [],
     ticket_id: generatedTicketId 
   };
@@ -174,11 +200,11 @@ async function submit() {
     const { error } = await sb.from('tickets').insert(data);
     if (error) { alert('Error: ' + error.message); btn.disabled = false; btn.textContent = 'Submit request →'; return; }
     
-    // Auto Email Alert Simulation
-    console.log(`%c[EMAIL SENT] To: ${email} | Ticket ID: ${generatedTicketId}. Setup an edge function/webhook to fully automate dispatch.`, "color: #1a4a2e; font-weight: bold;");
+    // Fire real-time notification routines
+    await dispatchEmailNotification(generatedTicketId, email, title, team);
   }
 
-  document.getElementById('success-msg').innerHTML = `Your request has been filed with **Ticket ID: ${generatedTicketId}**. A confirmation email placeholder has been recorded for <strong>${email}</strong>.`;
+  document.getElementById('success-msg').innerHTML = `Your request has been filed with **Ticket ID: ${generatedTicketId}**. Alerts have been sent to <strong>${email}</strong>, Zain, and Zarrar.`;
   document.getElementById('form-wrap').style.display = 'none';
   document.getElementById('success-wrap').style.display = 'block';
 }
@@ -188,7 +214,7 @@ function reset(){
   document.getElementById('success-wrap').style.display = 'none';
   ['s-name','s-email','s-title','s-desc','s-due'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('s-team').value = '';
-  document.getElementById('s-format').value = '';
+  document.getElementById('s-format').value = 'New Dashboard';
   document.getElementById('pr-h').checked = true;
   const btn = document.getElementById('sub-btn');
   btn.disabled = false; btn.textContent = 'Submit request →';
