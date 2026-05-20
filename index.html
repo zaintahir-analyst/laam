@@ -7,176 +7,185 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f3ee; --surface: #ffffff; --surface2: #f0ede6; --surface3: #e8e4db;
-  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
-  --text: #1a1a18; --text2: #6b6860; --text3: #a8a49a;
-  --accent: #1a4a2e; --accent-light: #e8f2ec; --accent-mid: #2d7a4f;
-  --red: #c0392b; --red-light: #fdf0ee;
-  --amber: #b8621a; --amber-light: #fef5ec;
-  --blue: #1a3a6b; --blue-light: #eef3fc;
-  --green: #1a4a2e; --green-light: #e8f2ec;
-  --purple: #4a1a6b; --purple-light: #f3eef8;
-  --radius: 8px; --radius-lg: 14px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--surface3:#e8e4db;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.15);
+  --text:#1a1a18;--text2:#6b6860;--text3:#a8a49a;
+  --accent:#1a4a2e;--accent-light:#e8f2ec;--accent-mid:#2d7a4f;
+  --red:#c0392b;--red-light:#fdf0ee;
+  --amber:#b8621a;--amber-light:#fef5ec;
+  --blue:#1a3a6b;--blue-light:#eef3fc;
+  --purple:#4a1a6b;--purple-light:#f3eef8;
+  --radius:8px;--radius-lg:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 16px rgba(0,0,0,.08);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
 /* AUTH */
-.auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg); padding: 20px; }
-.auth-card { background: var(--surface); border: 1px solid var(--border); padding: 40px 32px; border-radius: var(--radius-lg); width: 100%; max-width: 400px; box-shadow: var(--shadow-md); }
-.auth-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--accent); margin-bottom: 6px; text-align: center; }
-.auth-subtitle { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 28px; }
+.auth-wrapper{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.auth-card{background:var(--surface);border:1px solid var(--border);padding:40px 32px;border-radius:var(--radius-lg);width:100%;max-width:400px;box-shadow:var(--shadow-md);}
+.auth-title{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--accent);text-align:center;margin-bottom:6px;}
+.auth-subtitle{font-size:13px;color:var(--text2);text-align:center;margin-bottom:28px;}
 
 /* LAYOUT */
-.layout { display: none; min-height: 100vh; }
-.sidebar { width: 230px; min-width: 230px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-.sidebar-logo { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
-.logo-mark { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--accent); }
-.logo-sub { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.14em; font-family: 'IBM Plex Mono', monospace; margin-top: 3px; }
-.sidebar-section { padding: 14px 12px 6px; }
-.sidebar-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 8px; margin-bottom: 4px; }
-.nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: var(--radius); cursor: pointer; color: var(--text2); font-size: 13px; transition: all 0.12s; margin-bottom: 1px; border: 1px solid transparent; }
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: var(--accent-light); color: var(--accent); border-color: rgba(26,74,46,0.12); font-weight: 500; }
-.nav-badge { margin-left: auto; background: var(--surface2); color: var(--text2); font-size: 10px; font-family: 'IBM Plex Mono', monospace; padding: 1px 6px; border-radius: 20px; }
-.sidebar-footer { margin-top: auto; padding: 14px 12px; border-top: 1px solid var(--border); }
-.share-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border-radius: var(--radius); background: var(--accent); border: none; color: #fff; font-size: 12px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
-.share-btn:hover { background: var(--accent-mid); }
-.status-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; margin-bottom: 8px; }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
-.status-dot.live { background: #2ecc71; }
-.status-dot.error { background: var(--red); }
-.logout-link { display: inline-block; font-size: 11px; color: var(--red); cursor: pointer; margin-top: 8px; font-family: 'IBM Plex Mono', monospace; border: none; background: transparent; }
+.layout{display:none;min-height:100vh;}
+.sidebar{width:230px;min-width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sidebar-logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.logo-mark{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--accent);}
+.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;font-family:'IBM Plex Mono',monospace;margin-top:3px;}
+.sidebar-section{padding:14px 12px 6px;}
+.sidebar-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:0 8px;margin-bottom:4px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--radius);cursor:pointer;color:var(--text2);font-size:13px;transition:all .12s;margin-bottom:1px;border:1px solid transparent;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent-light);color:var(--accent);border-color:rgba(26,74,46,.12);font-weight:500;}
+.nav-badge{margin-left:auto;background:var(--surface2);color:var(--text2);font-size:10px;font-family:'IBM Plex Mono',monospace;padding:1px 6px;border-radius:20px;}
+.sidebar-footer{margin-top:auto;padding:14px 12px;border-top:1px solid var(--border);}
+.share-btn{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;border-radius:var(--radius);background:var(--accent);border:none;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:background .15s;}
+.share-btn:hover{background:var(--accent-mid);}
+.status-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);}
+.status-dot.live{background:#2ecc71;}
+.status-dot.error{background:var(--red);}
+.logout-link{display:inline-block;font-size:11px;color:var(--red);cursor:pointer;margin-top:8px;font-family:'IBM Plex Mono',monospace;border:none;background:transparent;}
 
 /* MAIN */
-.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.topbar { padding: 14px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); position: sticky; top: 0; z-index: 20; }
-.page-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; }
-.content { padding: 24px 28px; overflow-y: auto; flex: 1; }
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:20;}
+.page-title{font-family:'Fraunces',serif;font-size:17px;font-weight:600;}
+.content{padding:24px 28px;overflow-y:auto;flex:1;}
 
-/* VIEW SECTIONS — only one visible at a time */
-.view-section { display: none; }
-.view-section.active { display: block; }
+/* VIEWS */
+.view-section{display:none;}
+.view-section.active{display:block;}
 
 /* STATS */
-.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); }
-.stat-label { font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
-.stat-value { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; margin-top: 4px; }
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow);}
+.stat-label{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;}
+.stat-value{font-family:'Fraunces',serif;font-size:30px;font-weight:600;margin-top:4px;}
 
-/* FILTER PILLS */
-.filters-bar { margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
-.filter-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.filter-row.right-aligned { justify-content: flex-end; }
-.filter-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; width: 52px; flex-shrink: 0; }
-.pill-group { display: flex; gap: 4px; flex-wrap: wrap; }
-.fpill { padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 11px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
-.fpill:hover { border-color: var(--border2); background: var(--surface2); color: var(--text); }
-.fpill.active { background: var(--accent-light); border-color: rgba(26,74,46,0.25); color: var(--accent); font-weight: 500; }
-.fpill.active.p-critical { background: var(--red-light); border-color: rgba(192,57,43,0.2); color: var(--red); }
-.fpill.active.p-high { background: var(--amber-light); border-color: rgba(184,98,26,0.2); color: var(--amber); }
-.fpill.active.p-medium { background: var(--blue-light); border-color: rgba(26,58,107,0.2); color: var(--blue); }
-.fpill.active.p-low { background: var(--surface2); border-color: var(--border2); color: var(--text2); }
-
-/* VIEW TOGGLE */
-.view-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; gap: 2px; }
-.view-btn { padding: 4px 10px; border-radius: 6px; border: none; background: transparent; color: var(--text3); cursor: pointer; font-size: 12px; }
-.view-btn.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+/* FILTERS */
+.filters-bar{margin-bottom:16px;display:flex;flex-direction:column;gap:8px;}
+.filter-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.filter-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;width:52px;flex-shrink:0;}
+.pill-group{display:flex;gap:4px;flex-wrap:wrap;}
+.fpill{padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.fpill:hover{border-color:var(--border2);background:var(--surface2);color:var(--text);}
+.fpill.active{background:var(--accent-light);border-color:rgba(26,74,46,.25);color:var(--accent);font-weight:500;}
+.fpill.active.p-critical{background:var(--red-light);border-color:rgba(192,57,43,.2);color:var(--red);}
+.fpill.active.p-high{background:var(--amber-light);border-color:rgba(184,98,26,.2);color:var(--amber);}
+.fpill.active.p-medium{background:var(--blue-light);border-color:rgba(26,58,107,.2);color:var(--blue);}
+.fpill.active.p-low{background:var(--surface2);border-color:var(--border2);color:var(--text2);}
+.view-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:3px;gap:2px;}
+.view-btn{padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:12px;}
+.view-btn.active{background:var(--surface2);color:var(--text);font-weight:500;}
 
 /* TABLE */
-.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
-table { width: 100%; border-collapse: collapse; }
-thead { background: var(--surface2); }
-th { padding: 10px 14px; text-align: left; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--bg); }
-.ticket-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); }
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--surface2);}
+th{padding:10px 14px;text-align:left;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg);}
+.ticket-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);}
 
 /* BADGES */
-.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
-.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
-.p-critical { background: var(--red-light); color: var(--red); } .p-critical .badge-dot { background: var(--red); }
-.p-high { background: var(--amber-light); color: var(--amber); } .p-high .badge-dot { background: var(--amber); }
-.p-medium { background: var(--blue-light); color: var(--blue); } .p-medium .badge-dot { background: var(--blue); }
-.p-low { background: var(--surface2); color: var(--text3); } .p-low .badge-dot { background: var(--text3); }
-.s-new { background: var(--accent-light); color: var(--accent); }
-.s-inprogress { background: var(--purple-light); color: var(--purple); }
-.s-review { background: var(--amber-light); color: var(--amber); }
-.s-blocked { background: var(--red-light); color: var(--red); }
-.s-done { background: var(--green-light); color: var(--green); }
-.team-badge { padding: 2px 7px; border-radius: 5px; font-size: 11px; background: var(--surface2); color: var(--text2); font-family: 'IBM Plex Mono', monospace; }
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+.badge-dot{width:5px;height:5px;border-radius:50%;}
+.p-critical{background:var(--red-light);color:var(--red);}.p-critical .badge-dot{background:var(--red);}
+.p-high{background:var(--amber-light);color:var(--amber);}.p-high .badge-dot{background:var(--amber);}
+.p-medium{background:var(--blue-light);color:var(--blue);}.p-medium .badge-dot{background:var(--blue);}
+.p-low{background:var(--surface2);color:var(--text3);}.p-low .badge-dot{background:var(--text3);}
+.s-new{background:var(--accent-light);color:var(--accent);}
+.s-inprogress{background:var(--purple-light);color:var(--purple);}
+.s-review{background:var(--amber-light);color:var(--amber);}
+.s-blocked{background:var(--red-light);color:var(--red);}
+.s-done{background:#e8f2ec;color:#1a4a2e;}
+.team-badge{padding:2px 7px;border-radius:5px;font-size:11px;background:var(--surface2);color:var(--text2);font-family:'IBM Plex Mono',monospace;}
 
 /* SLA */
-.sla { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
-.sla-overdue { background: var(--red-light); color: var(--red); }
-.sla-today { background: var(--amber-light); color: var(--amber); }
-.sla-soon { background: #fffbf0; color: #8a6a00; border: 1px solid #f0d060; }
-.sla-ok { background: var(--accent-light); color: var(--accent); }
-.sla-done { background: var(--surface2); color: var(--text3); }
-.sla-none { color: var(--text3); font-size: 11px; }
-
-/* ROW ACTIONS */
-.icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: transparent; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; }
-.icon-btn:hover { background: var(--surface2); }
+.sla{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10px;font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+.sla-overdue{background:var(--red-light);color:var(--red);}
+.sla-today{background:var(--amber-light);color:var(--amber);}
+.sla-soon{background:#fffbf0;color:#8a6a00;border:1px solid #f0d060;}
+.sla-ok{background:var(--accent-light);color:var(--accent);}
+.sla-done{background:var(--surface2);color:var(--text3);}
+.sla-none{color:var(--text3);font-size:11px;}
+.icon-btn{width:26px;height:26px;border:1px solid var(--border);background:transparent;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;margin-right:2px;}
+.icon-btn:hover{background:var(--surface2);}
 
 /* KANBAN */
-.kanban-board { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; align-items: start; }
-.k-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
-.k-header { padding: 11px 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface2); }
-.k-title { font-size: 11px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; color: var(--text2); font-weight: 500; }
-.k-count { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); background: var(--surface); padding: 2px 6px; border-radius: 20px; border: 1px solid var(--border); }
-.k-body { padding: 8px; display: flex; flex-direction: column; gap: 7px; min-height: 50px; }
-.k-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 11px; cursor: pointer; transition: all 0.12s; box-shadow: var(--shadow); }
-.k-card:hover { border-color: var(--border2); box-shadow: var(--shadow-md); transform: translateY(-1px); }
-.k-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 7px; line-height: 1.4; }
-.k-card-meta { display: flex; justify-content: space-between; align-items: center; gap: 5px; }
-.k-card-team { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
-.k-empty { font-size: 11px; color: var(--text3); text-align: center; padding: 14px 0; font-family: 'IBM Plex Mono', monospace; }
+.kanban-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);}
+.kanban-toolbar-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
+.kanban-date-input{border:1px solid var(--border);background:var(--surface2);border-radius:var(--radius);font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);padding:4px 8px;outline:none;cursor:pointer;}
+.kanban-date-input:focus{border-color:var(--accent);}
+.kanban-sep{color:var(--text3);font-size:13px;font-family:'IBM Plex Mono',monospace;}
+.kanban-reset{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .12s;}
+.kanban-reset:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
+.kanban-summary{margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);}
+.kanban-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:start;}
+.k-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);}
+.k-header{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2);}
+.k-title{font-size:11px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;color:var(--text2);font-weight:500;}
+.k-count{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);background:var(--surface);padding:2px 6px;border-radius:20px;border:1px solid var(--border);}
+.k-body{padding:8px;display:flex;flex-direction:column;gap:7px;min-height:50px;}
+.k-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 11px;cursor:pointer;transition:all .12s;box-shadow:var(--shadow);}
+.k-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.k-card-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:5px;line-height:1.4;}
+.k-card-date{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:6px;}
+.k-card-meta{display:flex;justify-content:space-between;align-items:center;gap:5px;}
+.k-card-team{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
+.k-empty{font-size:11px;color:var(--text3);text-align:center;padding:14px 0;font-family:'IBM Plex Mono',monospace;}
 
 /* MODALS */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); overflow-y: auto; max-height: 95vh; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-.modal-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
-.modal-close { cursor: pointer; background: transparent; border: none; font-size: 20px; }
-.form-group { margin-bottom: 14px; }
-.form-label { display: block; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; margin-bottom: 5px; }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; outline: none; font-family: 'DM Sans', sans-serif; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.btn { padding: 8px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: #fff; font-family: 'DM Sans', sans-serif; }
-.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn-primary:hover { background: var(--accent-mid); }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-.detail-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; }
-.detail-value { font-size: 13px; margin-top: 2px; margin-bottom: 10px; }
-.notify-box { background: #fffbf0; border: 1px solid #f0d060; padding: 10px; border-radius: var(--radius); margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--radius-lg);width:540px;max-width:95vw;padding:24px;box-shadow:var(--shadow-md);overflow-y:auto;max-height:95vh;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.modal-title{font-family:'Fraunces',serif;font-size:18px;font-weight:600;}
+.modal-close{cursor:pointer;background:transparent;border:none;font-size:20px;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;margin-bottom:5px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn{padding:8px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:#fff;font-family:'DM Sans',sans-serif;}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-primary:hover{background:var(--accent-mid);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.detail-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;}
+.detail-value{font-size:13px;margin-top:2px;margin-bottom:10px;}
+.notify-box{background:#fffbf0;border:1px solid #f0d060;padding:10px 12px;border-radius:var(--radius);margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;}
+
+/* ALERT BANNER */
+.alert-banner{border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;font-size:12px;font-family:'IBM Plex Mono',monospace;display:none;}
+.alert-banner.show{display:block;}
+.alert-warn{background:var(--amber-light);border:1px solid rgba(184,98,26,.25);color:var(--amber);}
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div class="auth-wrapper" id="auth-screen">
   <div class="auth-card">
     <div class="auth-title">LAAM Analytics</div>
-    <div class="auth-subtitle">Internal Portal Request Tracker</div>
+    <div class="auth-subtitle">Internal Portal — Request Tracker</div>
     <div class="form-group">
       <label class="form-label">Work Email</label>
       <input class="form-input" type="email" id="auth-email" placeholder="name@laam.pk">
     </div>
-    <div class="form-group" style="margin-bottom: 24px;">
+    <div class="form-group" style="margin-bottom:24px">
       <label class="form-label">Password</label>
-      <input class="form-input" type="password" id="auth-pass" placeholder="••••••••">
+      <input class="form-input" type="password" id="auth-pass" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')handleLogin()">
     </div>
-    <button class="btn btn-primary" style="width:100%; padding:11px;" onclick="handleLogin()">Sign In</button>
+    <button class="btn btn-primary" style="width:100%;padding:11px" onclick="handleLogin()">Sign In</button>
   </div>
 </div>
 
 <!-- APP -->
 <div class="layout" id="app-wrapper">
-
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-mark">LAAM</div>
@@ -209,20 +218,23 @@ tr:hover td { background: var(--bg); }
         <span class="status-dot" id="status-dot"></span>
         <span id="status-text">Connecting…</span>
       </div>
-      <button class="share-btn" onclick="window.open('submit.html','_blank')">Share intake form</button>
-      <button class="logout-link" onclick="handleLogout()">→ Disconnect / Sign Out</button>
+      <button class="share-btn" onclick="window.open('submit.html','_blank')">📋 Share intake form</button>
+      <button class="logout-link" onclick="handleLogout()">→ Sign Out</button>
     </div>
   </aside>
 
   <main class="main">
     <div class="topbar">
       <div class="page-title" id="page-title">Dashboard</div>
-      <button class="btn btn-primary" onclick="openNew()" style="background-color:#1a4a2e;border-color:#1a4a2e;">+ New request</button>
+      <button class="btn btn-primary" onclick="openNew()" style="background:var(--accent);border-color:var(--accent)">+ New request</button>
     </div>
     <div class="content">
 
       <!-- DASHBOARD VIEW -->
       <div class="view-section active" id="view-dashboard">
+        <div class="alert-banner alert-warn" id="email-banner">
+          ⚠ Resend not configured — emails disabled. Add RESEND_API_KEY to config.js to enable notifications.
+        </div>
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-label">Total requests</div><div class="stat-value" id="stat-total">0</div></div>
           <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" id="stat-progress">0</div></div>
@@ -284,7 +296,16 @@ tr:hover td { background: var(--bg); }
             </table>
           </div>
         </div>
+
         <div id="sub-kanban" style="display:none">
+          <div class="kanban-toolbar">
+            <span class="kanban-toolbar-label">Date range</span>
+            <input type="date" id="k-from" class="kanban-date-input" onchange="renderKanban()">
+            <span class="kanban-sep">→</span>
+            <input type="date" id="k-to" class="kanban-date-input" onchange="renderKanban()">
+            <button class="kanban-reset" onclick="resetKanbanDates()">Clear</button>
+            <span class="kanban-summary" id="kanban-summary"></span>
+          </div>
           <div class="kanban-board" id="kanban-board"></div>
         </div>
       </div>
@@ -306,44 +327,45 @@ tr:hover td { background: var(--bg); }
     <div class="form-row">
       <div class="form-group"><label class="form-label">Team *</label>
         <select class="form-select" id="fi-team">
-          <option>Marketing</option><option>Product & Eng</option><option>Growth</option><option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option>
-        </select>
-      </div>
+          <option>Marketing</option><option>Product & Eng</option><option>Growth</option>
+          <option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option>
+        </select></div>
       <div class="form-group"><label class="form-label">Priority *</label>
-        <select class="form-select" id="fi-priority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
-      </div>
+        <select class="form-select" id="fi-priority">
+          <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+        </select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Status</label>
-        <select class="form-select" id="fi-status"><option>New</option><option>In Progress</option><option>Review</option><option>Blocked</option><option>Done</option></select>
-      </div>
+        <select class="form-select" id="fi-status">
+          <option>New</option><option>In Progress</option><option>Review</option><option>Blocked</option><option>Done</option>
+        </select></div>
       <div class="form-group"><label class="form-label">Assignee</label>
-        <select class="form-select" id="fi-assignee"><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select>
-      </div>
+        <select class="form-select" id="fi-assignee">
+          <option>Unassigned</option><option>Zain</option><option>Zarrar</option>
+        </select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Submitted By</label><input class="form-input" id="fi-submitter"></div>
-      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="fi-email" type="email"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="fi-email" type="email"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Expected Date</label><input class="form-input" type="date" id="fi-due"></div>
       <div class="form-group"><label class="form-label">Request Type</label>
         <select class="form-select" id="fi-format">
-          <option value="New Dashboard">New Dashboard</option>
-          <option value="Dashboard Modifications">Dashboard Modifications</option>
-          <option value="Data Discrepancy Troubleshooting">Data Discrepancy Troubleshooting</option>
-          <option value="Data Dump">Data Dump</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
+          <option>New Dashboard</option><option>Dashboard Modifications</option>
+          <option>Data Discrepancy Troubleshooting</option><option>Data Dump</option><option>Other</option>
+        </select></div>
     </div>
     <div class="notify-box">
       <input type="checkbox" id="fi-notify" checked>
-      <label for="fi-notify"><strong>Notify Requester:</strong> Dispatch an email updating them on changes to this request.</label>
+      <label for="fi-notify" style="cursor:pointer">
+        <strong>Notify requester</strong> — email them the updated status when you save.
+      </label>
     </div>
-    <div style="margin-top:20px; text-align:right; display:flex; gap:8px; justify-content:flex-end;">
+    <div style="margin-top:20px;display:flex;gap:8px;justify-content:flex-end">
       <button class="btn" onclick="closeModal('modal-form')">Cancel</button>
-      <button class="btn btn-primary" onclick="save()">Save Updates</button>
+      <button class="btn btn-primary" id="save-btn" onclick="save()">Save</button>
     </div>
   </div>
 </div>
@@ -352,11 +374,11 @@ tr:hover td { background: var(--bg); }
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="det-title">Details</div>
+      <div class="modal-title" id="det-title"></div>
       <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
     </div>
     <div id="det-body"></div>
-    <div style="text-align:right; margin-top:20px;">
+    <div style="text-align:right;margin-top:20px">
       <button class="btn" onclick="closeModal('modal-detail')">Close</button>
     </div>
   </div>
@@ -364,91 +386,188 @@ tr:hover td { background: var(--bg); }
 
 <script src="config.js"></script>
 <script>
+// ─────────────────────────────────────────────────────────────────────────────
+// config.js should export on window:
+//   SUPABASE_URL, SUPABASE_ANON_KEY
+//   RESEND_API_KEY          — from resend.com (starts with "re_")
+//   RESEND_FROM             — verified sender, e.g. "LAAM Analytics <noreply@laam.pk>"
+//   NOTIFY_EMAILS           — array or comma-string, e.g. ["zain.tahir@laam.pk","zarrar@laam.pk"]
+// ─────────────────────────────────────────────────────────────────────────────
+
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null;
 let tickets = [];
-let subView = 'table';
 
-// Filter state object — single source of truth
-const filters = { team: '', priority: '', assignee: '' };
+const filters = { team:'', priority:'', assignee:'' };
 
+// ── Init ──────────────────────────────────────────────────────────────────────
 async function init() {
-  const script = document.createElement('script');
-  script.src = SUPABASE_CDN;
-  script.onload = async () => {
-    if (typeof window.SUPABASE_URL === 'undefined') { setStatus('error', 'Config missing'); return; }
-    try {
-      sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      sb.auth.onAuthStateChange((event, session) => {
-        if (session) {
-          document.getElementById('auth-screen').style.display = 'none';
-          document.getElementById('app-wrapper').style.display = 'flex';
-          setStatus('live', 'Live ●');
-          fetchData();
-        } else {
-          document.getElementById('auth-screen').style.display = 'flex';
-          document.getElementById('app-wrapper').style.display = 'none';
-          setStatus('error', 'Protected Context');
-        }
-      });
-    } catch (e) { setStatus('error', 'Init error'); }
+  if (!window.RESEND_API_KEY) {
+    document.getElementById('email-banner').classList.add('show');
+  }
+  const s = document.createElement('script');
+  s.src = SUPABASE_CDN;
+  s.onload = () => {
+    if (!window.SUPABASE_URL) { setStatus('error','Config missing'); return; }
+    sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    sb.auth.onAuthStateChange((_, session) => {
+      if (session) {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('app-wrapper').style.display = 'flex';
+        setStatus('live','Live ●');
+        fetchData();
+      } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app-wrapper').style.display = 'none';
+      }
+    });
   };
-  document.head.appendChild(script);
+  document.head.appendChild(s);
 }
 
+// ── Auth ──────────────────────────────────────────────────────────────────────
 async function handleLogin() {
   const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-pass').value;
-  if (!email || !password) { alert('Please supply credentials.'); return; }
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) alert('Access Denied: ' + error.message);
+  const pass  = document.getElementById('auth-pass').value;
+  if (!email||!pass) { alert('Please enter your credentials.'); return; }
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) alert('Sign-in failed: ' + error.message);
 }
+async function handleLogout() { await sb.auth.signOut(); location.reload(); }
 
-async function handleLogout() {
-  await sb.auth.signOut();
-  location.reload();
-}
-
+// ── Data ──────────────────────────────────────────────────────────────────────
 async function fetchData() {
-  try {
-    const { data, error } = await sb.from('tickets').select('*').order('created_at', { ascending: false });
-    if (error) throw error;
-    tickets = data || [];
-    render();
-  } catch (e) { setStatus('error', 'Fetch error'); }
+  const { data, error } = await sb.from('tickets').select('*').order('created_at',{ ascending:false });
+  if (error) { setStatus('error','Fetch error'); return; }
+  tickets = data || [];
+  render();
 }
-
-function setStatus(s, txt) {
+function setStatus(s,txt) {
   document.getElementById('status-text').textContent = txt;
-  const dot = document.getElementById('status-dot');
-  dot.className = 'status-dot' + (s === 'live' ? ' live' : s === 'error' ? ' error' : '');
+  document.getElementById('status-dot').className = 'status-dot'+(s==='live'?' live':s==='error'?' error':'');
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────
+// ── Email via Resend ──────────────────────────────────────────────────────────
+async function sendEmail(to, subject, html) {
+  if (!window.RESEND_API_KEY) return;
+  const from = window.RESEND_FROM || 'LAAM Analytics <onboarding@resend.dev>';
+  const toArr = Array.isArray(to) ? to : [to];
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + window.RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to: toArr, subject, html })
+    });
+  } catch(e) { console.warn('Email send failed:', e); }
+}
 
-function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function emailStyle() {
+  return `font-family:'DM Sans',Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #e8e4db;border-radius:12px;overflow:hidden;`;
+}
+function emailHeader(color='#1a4a2e') {
+  return `<div style="background:${color};padding:20px 28px"><div style="font-family:'Georgia',serif;font-size:20px;font-weight:600;color:#fff">LAAM Analytics</div><div style="font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-top:3px">Request Tracker</div></div>`;
+}
+function emailFooter() {
+  return `<div style="background:#f5f3ee;padding:14px 28px;font-size:11px;color:#a8a49a;border-top:1px solid #e8e4db">This is an automated notification from the LAAM Analytics internal tracker.</div>`;
+}
+function ticketBlock(t) {
+  const rows = [
+    ['Ticket ID', t.ticket_id],
+    ['Title', t.title],
+    ['Team', t.team],
+    ['Priority', t.priority],
+    ['Status', t.status || 'New'],
+    ['Request Type', t.format || '—'],
+    ['Expected Date', t.due_date || 'Not specified'],
+  ].map(([l,v]) =>
+    `<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`
+  ).join('');
+  return `<table style="width:100%;border-collapse:collapse">${rows}</table>`;
+}
 
+// New ticket → team alert (Zain + Zarrar)
+async function notifyTeam(t) {
+  const recipients = Array.isArray(window.NOTIFY_EMAILS)
+    ? window.NOTIFY_EMAILS
+    : (window.NOTIFY_EMAILS || '').split(',').map(e=>e.trim()).filter(Boolean);
+  if (!recipients.length) return;
+
+  const priorityColor = { Critical:'#c0392b', High:'#b8621a', Medium:'#1a3a6b', Low:'#a8a49a' }[t.priority] || '#1a4a2e';
+  const html = `<div style="${emailStyle()}">
+    ${emailHeader()}
+    <div style="padding:24px 28px">
+      <div style="font-size:13px;color:#6b6860;margin-bottom:16px">A new analytics request has been submitted and needs triage.</div>
+      ${ticketBlock(t)}
+      ${t.description ? `<div style="margin-top:16px;padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Description:</strong><br>${t.description}</div>` : ''}
+      <div style="margin-top:16px">
+        <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:${priorityColor}22;color:${priorityColor};border:1px solid ${priorityColor}44">● ${t.priority} Priority</span>
+        <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:#f0ede6;color:#6b6860;margin-left:6px">📋 ${t.format || 'Request'}</span>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#a8a49a;font-family:monospace">Submitted by ${t.submitter} (${t.email || 'no email'}) · ${t.team}</div>
+    </div>
+    ${emailFooter()}
+  </div>`;
+
+  await sendEmail(recipients, `[LAAM Analytics] New request: ${t.ticket_id} — ${t.title}`, html);
+}
+
+// New ticket → confirmation to requester
+async function confirmRequester(t) {
+  if (!t.email) return;
+  const html = `<div style="${emailStyle()}">
+    ${emailHeader()}
+    <div style="padding:24px 28px">
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Request received, ${t.submitter}.</div>
+      <div style="font-size:13px;color:#6b6860;margin-bottom:20px;line-height:1.6">Your analytics request has been logged and the team will review it shortly. Keep this email for your records.</div>
+      ${ticketBlock(t)}
+    </div>
+    ${emailFooter()}
+  </div>`;
+
+  await sendEmail(t.email, `[LAAM Analytics] Request confirmed — ${t.ticket_id}`, html);
+}
+
+// Status update → requester (triggered by notify checkbox in edit modal)
+async function notifyStatusUpdate(t) {
+  if (!t.email) return;
+  const statusColor = { New:'#1a4a2e', 'In Progress':'#4a1a6b', Review:'#b8621a', Blocked:'#c0392b', Done:'#1a4a2e' }[t.status] || '#1a4a2e';
+  const html = `<div style="${emailStyle()}">
+    ${emailHeader(statusColor)}
+    <div style="padding:24px 28px">
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Update on your request</div>
+      <div style="font-size:13px;color:#6b6860;margin-bottom:20px;line-height:1.6">Hi ${t.submitter}, there's been an update to your analytics request.</div>
+      <div style="padding:14px 18px;background:#f5f3ee;border-radius:10px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
+        <div>
+          <div style="font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase">Status updated to</div>
+          <div style="font-size:18px;font-weight:600;color:${statusColor};margin-top:2px">${t.status}</div>
+        </div>
+      </div>
+      ${ticketBlock(t)}
+    </div>
+    ${emailFooter()}
+  </div>`;
+
+  await sendEmail(t.email, `[LAAM Analytics] Status update — ${t.ticket_id} is now "${t.status}"`, html);
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function fmtDate(iso) {
   if (!iso) return '—';
-  const d = new Date(iso);
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+  return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
 }
-
 function slaHtml(t) {
-  if (t.status === 'Done') return '<span class="sla sla-done">Completed</span>';
+  if (t.status==='Done') return '<span class="sla sla-done">Completed</span>';
   if (!t.due_date) return '<span class="sla-none">—</span>';
-  const today = new Date(); today.setHours(0,0,0,0);
-  const due = new Date(t.due_date); due.setHours(0,0,0,0);
-  const diff = Math.round((due - today) / 86400000);
-  if (diff < 0)  return `<span class="sla sla-overdue">▲ ${Math.abs(diff)}d overdue</span>`;
-  if (diff === 0) return `<span class="sla sla-today">Due today</span>`;
-  if (diff <= 3)  return `<span class="sla sla-soon">${diff}d left</span>`;
-  return `<span class="sla sla-ok">${diff}d left</span>`;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const due=new Date(t.due_date); due.setHours(0,0,0,0);
+  const d=Math.round((due-today)/86400000);
+  if (d<0)  return `<span class="sla sla-overdue">▲ ${Math.abs(d)}d overdue</span>`;
+  if (d===0) return `<span class="sla sla-today">Due today</span>`;
+  if (d<=3)  return `<span class="sla sla-soon">${d}d left</span>`;
+  return `<span class="sla sla-ok">${d}d left</span>`;
 }
-
-function statusClass(s) {
-  return 's-' + s.toLowerCase().replace(/\s+/g, '');
-}
+function sClass(s) { return 's-'+s.toLowerCase().replace(/\s+/g,''); }
 
 function rowHtml(t) {
   return `<tr>
@@ -456,8 +575,8 @@ function rowHtml(t) {
     <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3);font-size:11px">${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${esc(t.team)}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
-    <td><span class="badge ${statusClass(t.status)}">${t.status}</span></td>
-    <td style="font-size:12px;color:var(--text2)">${esc(t.assignee || 'Unassigned')}</td>
+    <td><span class="badge ${sClass(t.status)}">${t.status}</span></td>
+    <td style="font-size:12px;color:var(--text2)">${esc(t.assignee||'Unassigned')}</td>
     <td style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${fmtDate(t.created_at)}</td>
     <td style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2)">${fmtDate(t.due_date)}</td>
     <td>${slaHtml(t)}</td>
@@ -468,109 +587,122 @@ function rowHtml(t) {
   </tr>`;
 }
 
-// ── Render ────────────────────────────────────────────────────────────
-
-function render() {
-  const filtered = tickets.filter(t => {
-    if (filters.team && t.team !== filters.team) return false;
-    if (filters.priority && t.priority !== filters.priority) return false;
-    if (filters.assignee && t.assignee !== filters.assignee) return false;
+// ── Render ────────────────────────────────────────────────────────────────────
+function filtered() {
+  return tickets.filter(t => {
+    if (filters.team      && t.team     !== filters.team)     return false;
+    if (filters.priority  && t.priority !== filters.priority) return false;
+    if (filters.assignee  && t.assignee !== filters.assignee) return false;
     return true;
   });
-
-  document.getElementById('dash-tbody').innerHTML = tickets.map(rowHtml).join('');
-  document.getElementById('all-tbody').innerHTML = filtered.map(rowHtml).join('');
-  renderKanban(filtered);
-
-  document.getElementById('stat-total').textContent = tickets.length;
-  document.getElementById('stat-progress').textContent = tickets.filter(t => t.status === 'In Progress').length;
-  document.getElementById('stat-urgent').textContent = tickets.filter(t => t.priority === 'Critical' || t.priority === 'High').length;
-  document.getElementById('stat-done').textContent = tickets.filter(t => t.status === 'Done').length;
-  document.getElementById('badge-all').textContent = tickets.length;
 }
 
-function renderKanban(list) {
-  const cols = ['New', 'In Progress', 'Review', 'Blocked', 'Done'];
+function render() {
+  const f = filtered();
+  document.getElementById('dash-tbody').innerHTML = tickets.map(rowHtml).join('');
+  document.getElementById('all-tbody').innerHTML  = f.map(rowHtml).join('');
+  document.getElementById('stat-total').textContent    = tickets.length;
+  document.getElementById('stat-progress').textContent = tickets.filter(t=>t.status==='In Progress').length;
+  document.getElementById('stat-urgent').textContent   = tickets.filter(t=>['Critical','High'].includes(t.priority)).length;
+  document.getElementById('stat-done').textContent     = tickets.filter(t=>t.status==='Done').length;
+  document.getElementById('badge-all').textContent     = tickets.length;
+  renderKanban();
+}
+
+// ── Kanban ────────────────────────────────────────────────────────────────────
+function renderKanban() {
+  let list = filtered();
+  const fromVal = document.getElementById('k-from')?.value;
+  const toVal   = document.getElementById('k-to')?.value;
+  if (fromVal || toVal) {
+    const from = fromVal ? new Date(fromVal) : null;
+    const to   = toVal   ? new Date(toVal)   : null;
+    if (to) to.setHours(23,59,59,999);
+    list = list.filter(t => {
+      const c = new Date(t.created_at);
+      if (from && c < from) return false;
+      if (to   && c > to)   return false;
+      return true;
+    });
+  }
+
+  const cols = ['New','In Progress','Review','Blocked','Done'];
   document.getElementById('kanban-board').innerHTML = cols.map(col => {
     const cards = list.filter(t => t.status === col);
     return `<div class="k-col">
       <div class="k-header"><span class="k-title">${col}</span><span class="k-count">${cards.length}</span></div>
       <div class="k-body">${cards.length
-        ? cards.map(t => `<div class="k-card" onclick="openDetail(${t.id})">
+        ? cards.map(t=>`<div class="k-card" onclick="openDetail(${t.id})">
             <div class="k-card-title">${esc(t.title)}</div>
-            <div class="k-card-meta"><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span><span class="k-card-team">${esc(t.team)}</span></div>
+            <div class="k-card-date">Submitted ${fmtDate(t.created_at)}</div>
+            <div class="k-card-meta">
+              <span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span>
+              <span class="k-card-team">${esc(t.team)}</span>
+            </div>
           </div>`).join('')
         : '<div class="k-empty">empty</div>'
       }</div>
     </div>`;
   }).join('');
+
+  const done = list.filter(t=>t.status==='Done').length;
+  const total = list.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  const el = document.getElementById('kanban-summary');
+  if (el) el.textContent = total
+    ? `${total} ticket${total!==1?'s':''} · ${done} done · ${pct}% complete`
+    : 'No tickets in selected range';
 }
 
-// ── View switching ────────────────────────────────────────────────────
+function resetKanbanDates() {
+  document.getElementById('k-from').value = '';
+  document.getElementById('k-to').value   = '';
+  renderKanban();
+}
 
+// ── View / filter switching ───────────────────────────────────────────────────
 function setView(v, el) {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
-  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-  document.getElementById('view-' + v).classList.add('active');
-  document.getElementById('page-title').textContent = v === 'dashboard' ? 'Dashboard' : 'All Requests';
+  document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.getElementById('page-title').textContent = v==='dashboard' ? 'Dashboard' : 'All Requests';
 }
-
 function setSubView(v, btn) {
-  subView = v;
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('sub-table').style.display = v === 'table' ? 'block' : 'none';
-  document.getElementById('sub-kanban').style.display = v === 'kanban' ? 'block' : 'none';
+  document.getElementById('sub-table').style.display  = v==='table'  ? 'block':'none';
+  document.getElementById('sub-kanban').style.display = v==='kanban' ? 'block':'none';
 }
-
-// ── Filtering ─────────────────────────────────────────────────────────
-
 function setFilter(field, val, btn) {
   filters[field] = val;
-  const groupId = { team: 'fp-team', priority: 'fp-priority', assignee: 'fp-assignee' }[field];
-  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => {
-    p.classList.toggle('active', p.dataset.val === val);
-  });
+  const id = {team:'fp-team',priority:'fp-priority',assignee:'fp-assignee'}[field];
+  document.querySelectorAll('#'+id+' .fpill').forEach(p=>p.classList.toggle('active', p.dataset.val===val));
   render();
 }
-
-// Called from sidebar — switches to All view then applies filter
+function syncPills(id, val) {
+  document.querySelectorAll('#'+id+' .fpill').forEach(p=>p.classList.toggle('active', p.dataset.val===val));
+}
 function sidebarFilter(field, val, el) {
   setView('all', document.getElementById('nav-all'));
   filters[field] = val;
-  // Reset the other filter if switching between team/priority
-  if (field === 'team') {
-    filters.priority = '';
-    syncPills('fp-priority', '');
-  } else if (field === 'priority') {
-    filters.team = '';
-    syncPills('fp-team', '');
-  }
-  syncPills(field === 'team' ? 'fp-team' : 'fp-priority', val);
-  document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+  if (field==='team')     { filters.priority=''; syncPills('fp-priority',''); syncPills('fp-team',val); }
+  if (field==='priority') { filters.team='';     syncPills('fp-team','');     syncPills('fp-priority',val); }
+  document.querySelectorAll('.sidebar .nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
   render();
 }
 
-function syncPills(groupId, val) {
-  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => {
-    p.classList.toggle('active', p.dataset.val === val);
-  });
-}
-
-// ── Modals ────────────────────────────────────────────────────────────
-
+// ── Modals ────────────────────────────────────────────────────────────────────
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function openDetail(id) {
-  const t = tickets.find(x => x.id === id);
-  if (!t) return;
+  const t = tickets.find(x=>x.id===id); if(!t) return;
   document.getElementById('det-title').textContent = t.ticket_id;
   document.getElementById('det-body').innerHTML = `
     <div class="detail-grid">
       <div><div class="detail-label">Submitter</div><div class="detail-value">${esc(t.submitter)}</div></div>
-      <div><div class="detail-label">Email</div><div class="detail-value"><code style="font-size:12px">${esc(t.email || 'N/A')}</code></div></div>
+      <div><div class="detail-label">Email</div><div class="detail-value" style="font-size:12px">${esc(t.email||'N/A')}</div></div>
       <div><div class="detail-label">Team</div><div class="detail-value">${esc(t.team)}</div></div>
       <div><div class="detail-label">Priority</div><div class="detail-value">${t.priority}</div></div>
       <div><div class="detail-label">Status</div><div class="detail-value">${t.status}</div></div>
@@ -578,76 +710,89 @@ function openDetail(id) {
       <div><div class="detail-label">Submitted</div><div class="detail-value">${fmtDate(t.created_at)}</div></div>
       <div><div class="detail-label">Due Date</div><div class="detail-value">${fmtDate(t.due_date)}</div></div>
       <div><div class="detail-label">SLA</div><div class="detail-value">${slaHtml(t)}</div></div>
-      <div><div class="detail-label">Request Type</div><div class="detail-value">${esc(t.format || '—')}</div></div>
+      <div><div class="detail-label">Request Type</div><div class="detail-value">${esc(t.format||'—')}</div></div>
     </div>
     <div class="detail-label">Description</div>
-    <div class="detail-value" style="margin-top:4px;line-height:1.6">${esc(t.description || 'No description provided.')}</div>
-  `;
+    <div class="detail-value" style="margin-top:4px;line-height:1.6;white-space:pre-wrap">${esc(t.description||'No description provided.')}</div>`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
 function openEdit(id) {
-  const t = tickets.find(x => x.id === id);
-  if (!t) return;
-  document.getElementById('edit-id').value = t.id;
-  document.getElementById('fi-title').value = t.title;
-  document.getElementById('fi-desc').value = t.description || '';
-  document.getElementById('fi-team').value = t.team;
-  document.getElementById('fi-priority').value = t.priority;
-  document.getElementById('fi-status').value = t.status;
-  document.getElementById('fi-assignee').value = t.assignee || 'Unassigned';
+  const t = tickets.find(x=>x.id===id); if(!t) return;
+  document.getElementById('edit-id').value      = t.id;
+  document.getElementById('fi-title').value     = t.title;
+  document.getElementById('fi-desc').value      = t.description||'';
+  document.getElementById('fi-team').value      = t.team;
+  document.getElementById('fi-priority').value  = t.priority;
+  document.getElementById('fi-status').value    = t.status;
+  document.getElementById('fi-assignee').value  = t.assignee||'Unassigned';
   document.getElementById('fi-submitter').value = t.submitter;
-  document.getElementById('fi-email').value = t.email || '';
-  document.getElementById('fi-due').value = t.due_date || '';
-  document.getElementById('fi-format').value = t.format || 'New Dashboard';
+  document.getElementById('fi-email').value     = t.email||'';
+  document.getElementById('fi-due').value       = t.due_date||'';
+  document.getElementById('fi-format').value    = t.format||'New Dashboard';
+  document.getElementById('fi-notify').checked  = true;
   document.getElementById('form-title').textContent = 'Edit Request';
   document.getElementById('modal-form').classList.add('open');
 }
 
 function openNew() {
   document.getElementById('edit-id').value = '';
-  ['fi-title','fi-desc','fi-submitter','fi-email','fi-due'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('fi-team').value = 'Marketing';
+  ['fi-title','fi-desc','fi-submitter','fi-email','fi-due'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fi-team').value     = 'Marketing';
   document.getElementById('fi-priority').value = 'High';
-  document.getElementById('fi-status').value = 'New';
+  document.getElementById('fi-status').value   = 'New';
   document.getElementById('fi-assignee').value = 'Unassigned';
-  document.getElementById('fi-format').value = 'New Dashboard';
+  document.getElementById('fi-format').value   = 'New Dashboard';
+  document.getElementById('fi-notify').checked = false;
   document.getElementById('form-title').textContent = 'Create Request';
   document.getElementById('modal-form').classList.add('open');
 }
 
+// ── Save ──────────────────────────────────────────────────────────────────────
 async function save() {
-  const activeId = document.getElementById('edit-id').value;
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  const activeId     = document.getElementById('edit-id').value;
+  const shouldNotify = document.getElementById('fi-notify').checked;
   const data = {
-    title: document.getElementById('fi-title').value,
-    description: document.getElementById('fi-desc').value,
-    team: document.getElementById('fi-team').value,
-    priority: document.getElementById('fi-priority').value,
-    status: document.getElementById('fi-status').value,
-    assignee: document.getElementById('fi-assignee').value,
-    submitter: document.getElementById('fi-submitter').value,
-    email: document.getElementById('fi-email').value,
-    due_date: document.getElementById('fi-due').value || null,
-    format: document.getElementById('fi-format').value
+    title:       document.getElementById('fi-title').value.trim(),
+    description: document.getElementById('fi-desc').value.trim(),
+    team:        document.getElementById('fi-team').value,
+    priority:    document.getElementById('fi-priority').value,
+    status:      document.getElementById('fi-status').value,
+    assignee:    document.getElementById('fi-assignee').value,
+    submitter:   document.getElementById('fi-submitter').value.trim(),
+    email:       document.getElementById('fi-email').value.trim(),
+    due_date:    document.getElementById('fi-due').value || null,
+    format:      document.getElementById('fi-format').value
   };
 
-  if (activeId && activeId.trim() !== '') {
-    await sb.from('tickets').update(data).eq('id', parseInt(activeId, 10));
-    if (document.getElementById('fi-notify').checked) {
-      try {
-        await fetch(`https://formsubmit.co/ajax/${data.email}`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "Status Update": `Your request "${data.title}" has been set to "${data.status}".`, "_subject": "[LAAM Analytics] Status Updated" })
-        });
-      } catch(e) {}
+  try {
+    if (activeId) {
+      // ── Update existing ──
+      await sb.from('tickets').update(data).eq('id', parseInt(activeId,10));
+      if (shouldNotify) {
+        const existing = tickets.find(t=>t.id==activeId);
+        await notifyStatusUpdate({ ...data, ticket_id: existing?.ticket_id||'' });
+      }
+    } else {
+      // ── Create new ──
+      const ticket_id = 'LAAM-' + String(Date.now()).slice(-6);
+      const newTicket = { ...data, ticket_id, status: data.status||'New' };
+      await sb.from('tickets').insert([newTicket]);
+      // Fire both emails in parallel
+      await Promise.all([
+        notifyTeam(newTicket),
+        confirmRequester(newTicket)
+      ]);
     }
-  } else {
-    const tid = 'LAAM-' + String(Date.now()).slice(-6);
-    await sb.from('tickets').insert([{ ...data, ticket_id: tid }]);
+    closeModal('modal-form');
+    location.reload();
+  } catch(e) {
+    alert('Save failed: ' + e.message);
+    btn.disabled=false; btn.textContent='Save';
   }
-
-  closeModal('modal-form');
-  location.reload();
 }
 
 init();
