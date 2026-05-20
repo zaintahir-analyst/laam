@@ -105,6 +105,30 @@ tr:hover td { background: var(--bg); }
 .detail-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; }
 .detail-value { font-size: 13px; margin-top: 2px; margin-bottom: 10px; }
 .notify-box { background: #fffbf0; border: 1px solid #f0d060; padding: 10px; border-radius: var(--radius); margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
+
+/* Filter pills */
+.filters-bar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.filter-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filters-row2 { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.filter-group-inline { display: flex; align-items: center; gap: 8px; }
+.filter-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; min-width: 42px; }
+.filter-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+.fpill { padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 11px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+.fpill:hover { border-color: var(--border2); background: var(--surface2); color: var(--text); }
+.fpill.active { background: var(--accent-light); border-color: rgba(26,74,46,0.25); color: var(--accent); font-weight: 500; }
+.fpill-critical.active { background: var(--red-light); border-color: rgba(192,57,43,0.25); color: var(--red); }
+.fpill-high.active { background: var(--amber-light); border-color: rgba(184,98,26,0.25); color: var(--amber); }
+.fpill-medium.active { background: var(--blue-light); border-color: rgba(26,58,107,0.25); color: var(--blue); }
+.fpill-low.active { background: var(--surface2); border-color: var(--border2); color: var(--text2); }
+
+/* SLA badges */
+.sla-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+.sla-overdue { background: var(--red-light); color: var(--red); }
+.sla-today { background: var(--amber-light); color: var(--amber); }
+.sla-soon { background: #fffbf0; color: #8a6a00; border: 1px solid #f0d060; }
+.sla-ok { background: var(--accent-light); color: var(--accent); }
+.sla-none { color: var(--text3); font-size: 11px; }
+.sla-done { background: var(--surface2); color: var(--text3); }
 </style>
 </head>
 <body>
@@ -179,24 +203,61 @@ tr:hover td { background: var(--bg); }
         <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="stat-done">0</div></div>
       </div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Expected Date</th><th>Actions</th></tr></thead>
+        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
         <tbody id="dash-tbody"></tbody></table>
       </div>
     </div>
 
     <div class="view-section" id="view-all">
       <div class="filters-bar">
-        <select id="f-team" onchange="render()"><option value="">All Teams</option><option>Marketing</option><option>Product & Eng</option><option>Growth</option><option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option></select>
-        <select id="f-priority" onchange="render()"><option value="">All Priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
-        <select id="f-assignee" onchange="render()"><option value="">All Assignees</option><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select>
-        <div class="view-toggle">
-          <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
-          <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
+        <div class="filter-group">
+          <span class="filter-label">Team</span>
+          <div class="filter-pills" id="fp-team">
+            <button class="fpill active" data-val="" onclick="setFilter('team','',this)">All</button>
+            <button class="fpill" data-val="Marketing" onclick="setFilter('team','Marketing',this)">Marketing</button>
+            <button class="fpill" data-val="Product &amp; Eng" onclick="setFilter('team','Product & Eng',this)">Prod & Eng</button>
+            <button class="fpill" data-val="Growth" onclick="setFilter('team','Growth',this)">Growth</button>
+            <button class="fpill" data-val="Commercials" onclick="setFilter('team','Commercials',this)">Commercials</button>
+            <button class="fpill" data-val="Finance" onclick="setFilter('team','Finance',this)">Finance</button>
+            <button class="fpill" data-val="Experience" onclick="setFilter('team','Experience',this)">Experience</button>
+            <button class="fpill" data-val="Warehouse" onclick="setFilter('team','Warehouse',this)">Warehouse</button>
+          </div>
         </div>
+        <div class="filters-row2">
+          <div class="filter-group-inline">
+            <span class="filter-label">Priority</span>
+            <div class="filter-pills" id="fp-priority">
+              <button class="fpill active" data-val="" onclick="setFilter('priority','',this)">All</button>
+              <button class="fpill fpill-critical" data-val="Critical" onclick="setFilter('priority','Critical',this)">Critical</button>
+              <button class="fpill fpill-high" data-val="High" onclick="setFilter('priority','High',this)">High</button>
+              <button class="fpill fpill-medium" data-val="Medium" onclick="setFilter('priority','Medium',this)">Medium</button>
+              <button class="fpill fpill-low" data-val="Low" onclick="setFilter('priority','Low',this)">Low</button>
+            </div>
+          </div>
+          <div class="filter-group-inline">
+            <span class="filter-label">Assignee</span>
+            <div class="filter-pills" id="fp-assignee">
+              <button class="fpill active" data-val="" onclick="setFilter('assignee','',this)">All</button>
+              <button class="fpill" data-val="Unassigned" onclick="setFilter('assignee','Unassigned',this)">Unassigned</button>
+              <button class="fpill" data-val="Zain" onclick="setFilter('assignee','Zain',this)">Zain</button>
+              <button class="fpill" data-val="Zarrar" onclick="setFilter('assignee','Zarrar',this)">Zarrar</button>
+            </div>
+          </div>
+          <div class="filter-group-inline" style="margin-left:auto;">
+            <div class="view-toggle">
+              <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
+              <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
+            </div>
+          </div>
+        </div>
+        <!-- Hidden selects kept for JS compatibility -->
+        <select id="f-team" style="display:none" onchange="render()"><option value="">All Teams</option></select>
+        <select id="f-priority" style="display:none" onchange="render()"><option value="">All Priorities</option></select>
+        <select id="f-assignee" style="display:none" onchange="render()"><option value="">All Assignees</option></select>
       </div>
       <div id="sub-table">
         <div class="table-wrap">
-          <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Expected Date</th><th>Actions</th></tr></thead>
+          <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
           <tbody id="all-tbody"></tbody></table>
         </div>
       </div>
@@ -351,14 +412,34 @@ function render() {
     return true;
   });
   
+  const slaHtml = (t) => {
+    if (t.status === 'Done') return '<span class="sla-badge sla-done">Completed</span>';
+    if (!t.due_date) return '<span class="sla-none">—</span>';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const due = new Date(t.due_date); due.setHours(0,0,0,0);
+    const diff = Math.round((due - today) / 86400000);
+    if (diff < 0) return `<span class="sla-badge sla-overdue">▲ ${Math.abs(diff)}d overdue</span>`;
+    if (diff === 0) return `<span class="sla-badge sla-today">Due today</span>`;
+    if (diff <= 3) return `<span class="sla-badge sla-soon">${diff}d left</span>`;
+    return `<span class="sla-badge sla-ok">${diff}d left</span>`;
+  };
+
+  const fmtDate = (iso) => {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+  };
+
   const generateRowHtml = (t) => `<tr>
     <td><span class="ticket-id">${t.ticket_id}</span></td>
-    <td><strong>${esc(t.title)}</strong><br><small>${esc(t.submitter)}</small></td>
+    <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3)">${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${t.team}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
-    <td><span class="badge s-${t.status.toLowerCase().replace(' ', '')}">${t.status}</span></td>
-    <td>${t.assignee || 'Unassigned'}</td>
-    <td><code style="font-size:12px">${t.due_date || '—'}</code></td>
+    <td><span class="badge s-${t.status.toLowerCase().replace(/ /g,'')}">${t.status}</span></td>
+    <td style="font-size:12px;color:var(--text2)">${t.assignee || 'Unassigned'}</td>
+    <td style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${fmtDate(t.created_at)}</td>
+    <td style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2)">${t.due_date ? fmtDate(t.due_date) : '—'}</td>
+    <td>${slaHtml(t)}</td>
     <td>
       <button class="icon-btn" onclick="openDetail(${t.id})">👁</button>
       <button class="icon-btn" onclick="openEdit(${t.id})">✎</button>
@@ -497,14 +578,28 @@ function setView(v, el) {
   document.getElementById('page-title').textContent = v === 'dashboard' ? 'Dashboard' : 'All Requests';
 }
 
+function setFilter(field, val, btn) {
+  // Update hidden selects for render() compatibility
+  document.getElementById('f-' + field).value = val;
+  // Update active pill in the right group
+  const groupId = field === 'team' ? 'fp-team' : field === 'priority' ? 'fp-priority' : 'fp-assignee';
+  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
 function setQuickFilter(field, val, el) {
   setView('all', document.getElementById('nav-all'));
-  if (field === 'priority') {
-    document.getElementById('f-priority').value = val;
-    document.getElementById('f-team').value = '';
-  } else {
-    document.getElementById('f-team').value = val;
+  document.getElementById('f-' + field).value = val;
+  // Sync pill UI
+  if (field === 'team') {
+    document.querySelectorAll('#fp-team .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === val));
     document.getElementById('f-priority').value = '';
+    document.querySelectorAll('#fp-priority .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === ''));
+  } else {
+    document.querySelectorAll('#fp-priority .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === val));
+    document.getElementById('f-team').value = '';
+    document.querySelectorAll('#fp-team .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === ''));
   }
   document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
