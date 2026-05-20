@@ -14,7 +14,15 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
-.layout { display: flex; min-height: 100vh; }
+
+/* LOGIN SCREEN STYLES */
+.auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg); padding: 20px; }
+.auth-card { background: var(--surface); border: 1px solid var(--border); padding: 40px 32px; border-radius: var(--radius-lg); width: 100%; max-width: 400px; box-shadow: var(--shadow-md); }
+.auth-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--accent); margin-bottom: 6px; text-align: center; }
+.auth-subtitle { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 28px; }
+
+/* APP LAYOUT STRUCTURE */
+.layout { display: none; min-height: 100vh; } /* Toggled by JS Auth layer */
 .sidebar { width: 230px; min-width: 230px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .sidebar-logo { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
 .logo-mark { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--accent); }
@@ -32,6 +40,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
 .status-dot.live { background: #2ecc71; }
 .status-dot.error { background: var(--red); }
+.logout-link { display: inline-block; font-size: 11px; color: var(--red); cursor: pointer; margin-top: 8px; font-family: 'IBM Plex Mono', monospace; border: none; background: transparent; }
+
 .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .topbar { padding: 14px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); position: sticky; top: 0; z-index: 20; }
 .page-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; }
@@ -94,13 +104,28 @@ tr:hover td { background: var(--bg); }
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 .detail-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; }
 .detail-value { font-size: 13px; margin-top: 2px; margin-bottom: 10px; }
-.view-section { display: none; }
-.view-section.active { display: block; }
 .notify-box { background: #fffbf0; border: 1px solid #f0d060; padding: 10px; border-radius: var(--radius); margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
 </style>
 </head>
 <body>
-<div class="layout">
+
+<div class="auth-wrapper" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-title">LAAM Analytics</div>
+    <div class="auth-subtitle">Internal Portal Request Tracker</div>
+    <div class="form-group">
+      <label class="form-label">Work Email</label>
+      <input class="form-input" type="email" id="auth-email" placeholder="name@laam.pk">
+    </div>
+    <div class="form-group" style="margin-bottom: 24px;">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="auth-pass" placeholder="••••••••">
+    </div>
+    <button class="btn btn-primary" style="width:100%; padding:11px;" onclick="handleLogin()">Sign In</button>
+  </div>
+</div>
+
+<div class="layout" id="app-wrapper">
 
 <aside class="sidebar">
   <div class="sidebar-logo">
@@ -114,10 +139,10 @@ tr:hover td { background: var(--bg); }
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">By priority</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Critical',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--red)"></span>Critical</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','High',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber)"></span>High</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Medium',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue)"></span>Medium</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Low',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--text3)"></span>Low</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Critical',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-right:6px;"></span>Critical</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','High',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block;margin-right:6px;"></span>High</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Medium',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block;margin-right:6px;"></span>Medium</div>
+    <div class="nav-item" onclick="setQuickFilter('priority','Low',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--text3);display:inline-block;margin-right:6px;"></span>Low</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">By team</div>
@@ -135,6 +160,7 @@ tr:hover td { background: var(--bg); }
       <span id="status-text">Connecting…</span>
     </div>
     <button class="share-btn" onclick="window.open('submit.html','_blank')" style="background-color: #1a4a2e;">Share intake form</button>
+    <button class="logout-link" onclick="handleLogout()">→ Disconnect / Sign Out</button>
   </div>
 </aside>
 
@@ -244,7 +270,7 @@ tr:hover td { background: var(--bg); }
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null; 
 let tickets = [];
-let currentView = 'dashboard';
+let subView = 'table';
 
 async function init() {
   const script = document.createElement('script');
@@ -256,22 +282,58 @@ async function init() {
     }
     try {
       sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      const { data, error } = await sb.from('tickets').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      tickets = data || [];
-      setStatus('live', 'Live ●');
-      render();
+      
+      // Monitor current login status state automatically
+      sb.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('app-wrapper').style.display = 'flex';
+          setStatus('live', 'Live ●');
+          fetchData();
+        } else {
+          document.getElementById('auth-screen').style.display = 'flex';
+          document.getElementById('app-wrapper').style.display = 'none';
+          setStatus('error', 'Protected Context');
+        }
+      });
     } catch (e) {
-      setStatus('error', 'Config error');
+      setStatus('error', 'Auth failure initialization');
     }
   };
   document.head.appendChild(script);
 }
 
+async function handleLogin() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-pass').value;
+  if(!email || !password) { alert('Please supply credentials.'); return; }
+  
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if(error) alert('Access Denied: ' + error.message);
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+async function fetchData() {
+  try {
+    const { data, error } = await sb.from('tickets').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    tickets = data || [];
+    render();
+  } catch (e) {
+    setStatus('error', 'Fetch error');
+  }
+}
+
 function setStatus(s, txt) {
   document.getElementById('status-text').textContent = txt;
   const dot = document.getElementById('status-dot');
-  dot.className = 'status-dot ' + (s === 'live' ? 'live' : 'error');
+  dot.className = 'status-dot';
+  if(s === 'live') dot.classList.add('live');
+  if(s === 'error') dot.classList.add('error');
 }
 
 function render() {
@@ -408,7 +470,6 @@ async function save() {
   };
 
   if (activeRecordId && activeRecordId.trim() !== "") {
-    // Explicit overwrite via ID routing ensures rows don't duplicate on save
     await sb.from('tickets').update(data).eq('id', parseInt(activeRecordId, 10));
     if (document.getElementById('fi-notify').checked) {
       try {
