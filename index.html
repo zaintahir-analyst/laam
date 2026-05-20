@@ -7,22 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f3ee; --surface: #ffffff; --surface2: #f0ede6; --surface3: #e8e4db; --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
-  --text: #1a1a18; --text2: #6b6860; --text3: #a8a49a; --accent: #1a4a2e; --accent-light: #e8f2ec; --accent-mid: #2d7a4f;
-  --red: #c0392b; --red-light: #fdf0ee; --amber: #b8621a; --amber-light: #fef5ec; --blue: #1a3a6b; --blue-light: #eef3fc; --green: #1a4a2e; --green-light: #e8f2ec; --purple: #4a1a6b; --purple-light: #f3eef8;
-  --radius: 8px; --radius-lg: 14px; --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --bg: #f5f3ee; --surface: #ffffff; --surface2: #f0ede6; --surface3: #e8e4db;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+  --text: #1a1a18; --text2: #6b6860; --text3: #a8a49a;
+  --accent: #1a4a2e; --accent-light: #e8f2ec; --accent-mid: #2d7a4f;
+  --red: #c0392b; --red-light: #fdf0ee;
+  --amber: #b8621a; --amber-light: #fef5ec;
+  --blue: #1a3a6b; --blue-light: #eef3fc;
+  --green: #1a4a2e; --green-light: #e8f2ec;
+  --purple: #4a1a6b; --purple-light: #f3eef8;
+  --radius: 8px; --radius-lg: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
 
-/* LOGIN SCREEN STYLES */
+/* AUTH */
 .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg); padding: 20px; }
 .auth-card { background: var(--surface); border: 1px solid var(--border); padding: 40px 32px; border-radius: var(--radius-lg); width: 100%; max-width: 400px; box-shadow: var(--shadow-md); }
 .auth-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: var(--accent); margin-bottom: 6px; text-align: center; }
 .auth-subtitle { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 28px; }
 
-/* APP LAYOUT STRUCTURE */
-.layout { display: none; min-height: 100vh; } /* Toggled by JS Auth layer */
+/* LAYOUT */
+.layout { display: none; min-height: 100vh; }
 .sidebar { width: 230px; min-width: 230px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .sidebar-logo { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
 .logo-mark { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--accent); }
@@ -42,25 +49,52 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .status-dot.error { background: var(--red); }
 .logout-link { display: inline-block; font-size: 11px; color: var(--red); cursor: pointer; margin-top: 8px; font-family: 'IBM Plex Mono', monospace; border: none; background: transparent; }
 
+/* MAIN */
 .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .topbar { padding: 14px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface); position: sticky; top: 0; z-index: 20; }
 .page-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; }
 .content { padding: 24px 28px; overflow-y: auto; flex: 1; }
+
+/* VIEW SECTIONS — only one visible at a time */
+.view-section { display: none; }
+.view-section.active { display: block; }
+
+/* STATS */
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow); }
 .stat-label { font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
 .stat-value { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; margin-top: 4px; }
-.filters-bar { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
-.view-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; gap: 2px; margin-left: auto; }
+
+/* FILTER PILLS */
+.filters-bar { margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
+.filter-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filter-row.right-aligned { justify-content: flex-end; }
+.filter-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; width: 52px; flex-shrink: 0; }
+.pill-group { display: flex; gap: 4px; flex-wrap: wrap; }
+.fpill { padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 11px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
+.fpill:hover { border-color: var(--border2); background: var(--surface2); color: var(--text); }
+.fpill.active { background: var(--accent-light); border-color: rgba(26,74,46,0.25); color: var(--accent); font-weight: 500; }
+.fpill.active.p-critical { background: var(--red-light); border-color: rgba(192,57,43,0.2); color: var(--red); }
+.fpill.active.p-high { background: var(--amber-light); border-color: rgba(184,98,26,0.2); color: var(--amber); }
+.fpill.active.p-medium { background: var(--blue-light); border-color: rgba(26,58,107,0.2); color: var(--blue); }
+.fpill.active.p-low { background: var(--surface2); border-color: var(--border2); color: var(--text2); }
+
+/* VIEW TOGGLE */
+.view-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; gap: 2px; }
 .view-btn { padding: 4px 10px; border-radius: 6px; border: none; background: transparent; color: var(--text3); cursor: pointer; font-size: 12px; }
 .view-btn.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+
+/* TABLE */
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
 table { width: 100%; border-collapse: collapse; }
 thead { background: var(--surface2); }
 th { padding: 10px 14px; text-align: left; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; border-bottom: 1px solid var(--border); }
 td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--bg); }
 .ticket-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); }
+
+/* BADGES */
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
 .p-critical { background: var(--red-light); color: var(--red); } .p-critical .badge-dot { background: var(--red); }
@@ -68,14 +102,26 @@ tr:hover td { background: var(--bg); }
 .p-medium { background: var(--blue-light); color: var(--blue); } .p-medium .badge-dot { background: var(--blue); }
 .p-low { background: var(--surface2); color: var(--text3); } .p-low .badge-dot { background: var(--text3); }
 .s-new { background: var(--accent-light); color: var(--accent); }
-.s-progress { background: var(--purple-light); color: var(--purple); }
+.s-inprogress { background: var(--purple-light); color: var(--purple); }
 .s-review { background: var(--amber-light); color: var(--amber); }
 .s-blocked { background: var(--red-light); color: var(--red); }
 .s-done { background: var(--green-light); color: var(--green); }
 .team-badge { padding: 2px 7px; border-radius: 5px; font-size: 11px; background: var(--surface2); color: var(--text2); font-family: 'IBM Plex Mono', monospace; }
-.row-actions { display: flex; gap: 4px; }
-.icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: transparent; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; }
+
+/* SLA */
+.sla { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+.sla-overdue { background: var(--red-light); color: var(--red); }
+.sla-today { background: var(--amber-light); color: var(--amber); }
+.sla-soon { background: #fffbf0; color: #8a6a00; border: 1px solid #f0d060; }
+.sla-ok { background: var(--accent-light); color: var(--accent); }
+.sla-done { background: var(--surface2); color: var(--text3); }
+.sla-none { color: var(--text3); font-size: 11px; }
+
+/* ROW ACTIONS */
+.icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: transparent; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; }
 .icon-btn:hover { background: var(--surface2); }
+
+/* KANBAN */
 .kanban-board { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; align-items: start; }
 .k-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
 .k-header { padding: 11px 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--surface2); }
@@ -88,51 +134,30 @@ tr:hover td { background: var(--bg); }
 .k-card-meta { display: flex; justify-content: space-between; align-items: center; gap: 5px; }
 .k-card-team { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
 .k-empty { font-size: 11px; color: var(--text3); text-align: center; padding: 14px 0; font-family: 'IBM Plex Mono', monospace; }
+
+/* MODALS */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); overflow-y:auto; max-height:95vh; }
+.modal { background: var(--surface); border-radius: var(--radius-lg); width: 540px; max-width: 95vw; padding: 24px; box-shadow: var(--shadow-md); overflow-y: auto; max-height: 95vh; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
 .modal-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
 .modal-close { cursor: pointer; background: transparent; border: none; font-size: 20px; }
 .form-group { margin-bottom: 14px; }
 .form-label { display: block; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; margin-bottom: 5px; }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; outline: none; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; outline: none; font-family: 'DM Sans', sans-serif; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.btn { padding: 8px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: #fff; }
+.btn { padding: 8px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: #fff; font-family: 'DM Sans', sans-serif; }
 .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .btn-primary:hover { background: var(--accent-mid); }
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 .detail-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; }
 .detail-value { font-size: 13px; margin-top: 2px; margin-bottom: 10px; }
 .notify-box { background: #fffbf0; border: 1px solid #f0d060; padding: 10px; border-radius: var(--radius); margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
-
-/* Filter pills */
-.filters-bar { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-.filter-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.filters-row2 { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.filter-group-inline { display: flex; align-items: center; gap: 8px; }
-.filter-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; min-width: 42px; }
-.filter-pills { display: flex; gap: 4px; flex-wrap: wrap; }
-.fpill { padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 11px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; transition: all 0.12s; white-space: nowrap; }
-.fpill:hover { border-color: var(--border2); background: var(--surface2); color: var(--text); }
-.fpill.active { background: var(--accent-light); border-color: rgba(26,74,46,0.25); color: var(--accent); font-weight: 500; }
-.fpill-critical.active { background: var(--red-light); border-color: rgba(192,57,43,0.25); color: var(--red); }
-.fpill-high.active { background: var(--amber-light); border-color: rgba(184,98,26,0.25); color: var(--amber); }
-.fpill-medium.active { background: var(--blue-light); border-color: rgba(26,58,107,0.25); color: var(--blue); }
-.fpill-low.active { background: var(--surface2); border-color: var(--border2); color: var(--text2); }
-
-/* SLA badges */
-.sla-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
-.sla-overdue { background: var(--red-light); color: var(--red); }
-.sla-today { background: var(--amber-light); color: var(--amber); }
-.sla-soon { background: #fffbf0; color: #8a6a00; border: 1px solid #f0d060; }
-.sla-ok { background: var(--accent-light); color: var(--accent); }
-.sla-none { color: var(--text3); font-size: 11px; }
-.sla-done { background: var(--surface2); color: var(--text3); }
 </style>
 </head>
 <body>
 
+<!-- AUTH SCREEN -->
 <div class="auth-wrapper" id="auth-screen">
   <div class="auth-card">
     <div class="auth-title">LAAM Analytics</div>
@@ -149,146 +174,152 @@ tr:hover td { background: var(--bg); }
   </div>
 </div>
 
+<!-- APP -->
 <div class="layout" id="app-wrapper">
 
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">LAAM</div>
-    <div class="logo-sub">Analytics Tracker</div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">Views</div>
-    <div class="nav-item active" id="nav-dashboard" onclick="setView('dashboard',this)">Dashboard</div>
-    <div class="nav-item" id="nav-all" onclick="setView('all',this)">All requests <span class="nav-badge" id="badge-all">0</span></div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">By priority</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Critical',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-right:6px;"></span>Critical</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','High',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block;margin-right:6px;"></span>High</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Medium',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block;margin-right:6px;"></span>Medium</div>
-    <div class="nav-item" onclick="setQuickFilter('priority','Low',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--text3);display:inline-block;margin-right:6px;"></span>Low</div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">By team</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Marketing',this)">Marketing</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Product & Eng',this)">Product & Eng</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Growth',this)">Growth</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Commercials',this)">Commercials</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Finance',this)">Finance</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Experience',this)">Experience</div>
-    <div class="nav-item" onclick="setQuickFilter('team','Warehouse',this)">Warehouse</div>
-  </div>
-  <div class="sidebar-footer">
-    <div class="status-row">
-      <span class="status-dot" id="status-dot"></span>
-      <span id="status-text">Connecting…</span>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">LAAM</div>
+      <div class="logo-sub">Analytics Tracker</div>
     </div>
-    <button class="share-btn" onclick="window.open('submit.html','_blank')" style="background-color: #1a4a2e;">Share intake form</button>
-    <button class="logout-link" onclick="handleLogout()">→ Disconnect / Sign Out</button>
-  </div>
-</aside>
-
-<main class="main">
-  <div class="topbar">
-    <div class="page-title" id="page-title">Dashboard</div>
-    <button class="btn btn-primary" onclick="openNew()" style="background-color: #1a4a2e; border-color: #1a4a2e;">+ New request</button>
-  </div>
-  <div class="content">
-
-    <div class="view-section active" id="view-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">Total requests</div><div class="stat-value" id="stat-total">0</div></div>
-        <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" id="stat-progress">0</div></div>
-        <div class="stat-card"><div class="stat-label">Urgent</div><div class="stat-value" id="stat-urgent">0</div></div>
-        <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="stat-done">0</div></div>
-      </div>
-      <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
-        <tbody id="dash-tbody"></tbody></table>
-      </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Views</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="setView('dashboard',this)">Dashboard</div>
+      <div class="nav-item" id="nav-all" onclick="setView('all',this)">All requests <span class="nav-badge" id="badge-all">0</span></div>
     </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">By priority</div>
+      <div class="nav-item" onclick="sidebarFilter('priority','Critical',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-right:6px;flex-shrink:0"></span>Critical</div>
+      <div class="nav-item" onclick="sidebarFilter('priority','High',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block;margin-right:6px;flex-shrink:0"></span>High</div>
+      <div class="nav-item" onclick="sidebarFilter('priority','Medium',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block;margin-right:6px;flex-shrink:0"></span>Medium</div>
+      <div class="nav-item" onclick="sidebarFilter('priority','Low',this)"><span style="width:7px;height:7px;border-radius:50%;background:var(--text3);display:inline-block;margin-right:6px;flex-shrink:0"></span>Low</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">By team</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Marketing',this)">Marketing</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Product & Eng',this)">Product & Eng</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Growth',this)">Growth</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Commercials',this)">Commercials</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Finance',this)">Finance</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Experience',this)">Experience</div>
+      <div class="nav-item" onclick="sidebarFilter('team','Warehouse',this)">Warehouse</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="status-row">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">Connecting…</span>
+      </div>
+      <button class="share-btn" onclick="window.open('submit.html','_blank')">Share intake form</button>
+      <button class="logout-link" onclick="handleLogout()">→ Disconnect / Sign Out</button>
+    </div>
+  </aside>
 
-    <div class="view-section" id="view-all">
-      <div class="filters-bar">
-        <div class="filter-group">
-          <span class="filter-label">Team</span>
-          <div class="filter-pills" id="fp-team">
-            <button class="fpill active" data-val="" onclick="setFilter('team','',this)">All</button>
-            <button class="fpill" data-val="Marketing" onclick="setFilter('team','Marketing',this)">Marketing</button>
-            <button class="fpill" data-val="Product &amp; Eng" onclick="setFilter('team','Product & Eng',this)">Prod & Eng</button>
-            <button class="fpill" data-val="Growth" onclick="setFilter('team','Growth',this)">Growth</button>
-            <button class="fpill" data-val="Commercials" onclick="setFilter('team','Commercials',this)">Commercials</button>
-            <button class="fpill" data-val="Finance" onclick="setFilter('team','Finance',this)">Finance</button>
-            <button class="fpill" data-val="Experience" onclick="setFilter('team','Experience',this)">Experience</button>
-            <button class="fpill" data-val="Warehouse" onclick="setFilter('team','Warehouse',this)">Warehouse</button>
-          </div>
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">Dashboard</div>
+      <button class="btn btn-primary" onclick="openNew()" style="background-color:#1a4a2e;border-color:#1a4a2e;">+ New request</button>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD VIEW -->
+      <div class="view-section active" id="view-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Total requests</div><div class="stat-value" id="stat-total">0</div></div>
+          <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" id="stat-progress">0</div></div>
+          <div class="stat-card"><div class="stat-label">Urgent</div><div class="stat-value" id="stat-urgent">0</div></div>
+          <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="stat-done">0</div></div>
         </div>
-        <div class="filters-row2">
-          <div class="filter-group-inline">
-            <span class="filter-label">Priority</span>
-            <div class="filter-pills" id="fp-priority">
-              <button class="fpill active" data-val="" onclick="setFilter('priority','',this)">All</button>
-              <button class="fpill fpill-critical" data-val="Critical" onclick="setFilter('priority','Critical',this)">Critical</button>
-              <button class="fpill fpill-high" data-val="High" onclick="setFilter('priority','High',this)">High</button>
-              <button class="fpill fpill-medium" data-val="Medium" onclick="setFilter('priority','Medium',this)">Medium</button>
-              <button class="fpill fpill-low" data-val="Low" onclick="setFilter('priority','Low',this)">Low</button>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
+            <tbody id="dash-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ALL REQUESTS VIEW -->
+      <div class="view-section" id="view-all">
+        <div class="filters-bar">
+          <div class="filter-row">
+            <span class="filter-label">Team</span>
+            <div class="pill-group" id="fp-team">
+              <button class="fpill active" data-val="" onclick="setFilter('team','',this)">All</button>
+              <button class="fpill" data-val="Marketing" onclick="setFilter('team','Marketing',this)">Marketing</button>
+              <button class="fpill" data-val="Product & Eng" onclick="setFilter('team','Product & Eng',this)">Prod & Eng</button>
+              <button class="fpill" data-val="Growth" onclick="setFilter('team','Growth',this)">Growth</button>
+              <button class="fpill" data-val="Commercials" onclick="setFilter('team','Commercials',this)">Commercials</button>
+              <button class="fpill" data-val="Finance" onclick="setFilter('team','Finance',this)">Finance</button>
+              <button class="fpill" data-val="Experience" onclick="setFilter('team','Experience',this)">Experience</button>
+              <button class="fpill" data-val="Warehouse" onclick="setFilter('team','Warehouse',this)">Warehouse</button>
             </div>
           </div>
-          <div class="filter-group-inline">
-            <span class="filter-label">Assignee</span>
-            <div class="filter-pills" id="fp-assignee">
+          <div class="filter-row">
+            <span class="filter-label">Priority</span>
+            <div class="pill-group" id="fp-priority">
+              <button class="fpill active" data-val="" onclick="setFilter('priority','',this)">All</button>
+              <button class="fpill" data-val="Critical" onclick="setFilter('priority','Critical',this)">Critical</button>
+              <button class="fpill" data-val="High" onclick="setFilter('priority','High',this)">High</button>
+              <button class="fpill" data-val="Medium" onclick="setFilter('priority','Medium',this)">Medium</button>
+              <button class="fpill" data-val="Low" onclick="setFilter('priority','Low',this)">Low</button>
+            </div>
+            <span class="filter-label" style="margin-left:16px">Assignee</span>
+            <div class="pill-group" id="fp-assignee">
               <button class="fpill active" data-val="" onclick="setFilter('assignee','',this)">All</button>
               <button class="fpill" data-val="Unassigned" onclick="setFilter('assignee','Unassigned',this)">Unassigned</button>
               <button class="fpill" data-val="Zain" onclick="setFilter('assignee','Zain',this)">Zain</button>
               <button class="fpill" data-val="Zarrar" onclick="setFilter('assignee','Zarrar',this)">Zarrar</button>
             </div>
-          </div>
-          <div class="filter-group-inline" style="margin-left:auto;">
-            <div class="view-toggle">
+            <div class="view-toggle" style="margin-left:auto">
               <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
               <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
             </div>
           </div>
         </div>
-        <!-- Hidden selects kept for JS compatibility -->
-        <select id="f-team" style="display:none" onchange="render()"><option value="">All Teams</option></select>
-        <select id="f-priority" style="display:none" onchange="render()"><option value="">All Priorities</option></select>
-        <select id="f-assignee" style="display:none" onchange="render()"><option value="">All Assignees</option></select>
-      </div>
-      <div id="sub-table">
-        <div class="table-wrap">
-          <table><thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
-          <tbody id="all-tbody"></tbody></table>
+
+        <div id="sub-table">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Request</th><th>Team</th><th>Priority</th><th>Status</th><th>Assigned</th><th>Submitted</th><th>Due Date</th><th>SLA</th><th>Actions</th></tr></thead>
+              <tbody id="all-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="sub-kanban" style="display:none">
+          <div class="kanban-board" id="kanban-board"></div>
         </div>
       </div>
-      <div id="sub-kanban" style="display:none">
-        <div class="kanban-board" id="kanban-board"></div>
-      </div>
-    </div>
 
-  </div>
-</main>
+    </div>
+  </main>
 </div>
 
+<!-- EDIT / CREATE MODAL -->
 <div class="modal-overlay" id="modal-form">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="form-title">Edit Request</div><button class="modal-close" onclick="closeModal('modal-form')">×</button></div>
+    <div class="modal-header">
+      <div class="modal-title" id="form-title">Edit Request</div>
+      <button class="modal-close" onclick="closeModal('modal-form')">×</button>
+    </div>
     <input type="hidden" id="edit-id">
     <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fi-title"></div>
-    <div class="form-group"><label class="form-label">Details</label><textarea class="form-textarea" id="fi-desc"></textarea></div>
+    <div class="form-group"><label class="form-label">Details</label><textarea class="form-textarea" id="fi-desc" style="min-height:80px;resize:vertical"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Team *</label>
         <select class="form-select" id="fi-team">
           <option>Marketing</option><option>Product & Eng</option><option>Growth</option><option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option>
-        </select></div>
+        </select>
+      </div>
       <div class="form-group"><label class="form-label">Priority *</label>
-        <select class="form-select" id="fi-priority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        <select class="form-select" id="fi-priority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Status</label>
-        <select class="form-select" id="fi-status"><option>New</option><option>In Progress</option><option>Review</option><option>Blocked</option><option>Done</option></select></div>
+        <select class="form-select" id="fi-status"><option>New</option><option>In Progress</option><option>Review</option><option>Blocked</option><option>Done</option></select>
+      </div>
       <div class="form-group"><label class="form-label">Assignee</label>
-        <select class="form-select" id="fi-assignee"><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select></div>
+        <select class="form-select" id="fi-assignee"><option>Unassigned</option><option>Zain</option><option>Zarrar</option></select>
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Submitted By</label><input class="form-input" id="fi-submitter"></div>
@@ -303,22 +334,27 @@ tr:hover td { background: var(--bg); }
           <option value="Data Discrepancy Troubleshooting">Data Discrepancy Troubleshooting</option>
           <option value="Data Dump">Data Dump</option>
           <option value="Other">Other</option>
-        </select></div>
+        </select>
+      </div>
     </div>
     <div class="notify-box">
       <input type="checkbox" id="fi-notify" checked>
-      <label for="fi-notify"><strong>Notify Requester:</strong> Instantly dispatch email updating them about changes to this request.</label>
+      <label for="fi-notify"><strong>Notify Requester:</strong> Dispatch an email updating them on changes to this request.</label>
     </div>
-    <div style="margin-top:20px; text-align:right;">
+    <div style="margin-top:20px; text-align:right; display:flex; gap:8px; justify-content:flex-end;">
       <button class="btn" onclick="closeModal('modal-form')">Cancel</button>
       <button class="btn btn-primary" onclick="save()">Save Updates</button>
     </div>
   </div>
 </div>
 
+<!-- DETAIL MODAL -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title" id="det-title">Details</div><button class="modal-close" onclick="closeModal('modal-detail')">×</button></div>
+    <div class="modal-header">
+      <div class="modal-title" id="det-title">Details</div>
+      <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+    </div>
     <div id="det-body"></div>
     <div style="text-align:right; margin-top:20px;">
       <button class="btn" onclick="closeModal('modal-detail')">Close</button>
@@ -329,22 +365,20 @@ tr:hover td { background: var(--bg); }
 <script src="config.js"></script>
 <script>
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-let sb = null; 
+let sb = null;
 let tickets = [];
 let subView = 'table';
+
+// Filter state object — single source of truth
+const filters = { team: '', priority: '', assignee: '' };
 
 async function init() {
   const script = document.createElement('script');
   script.src = SUPABASE_CDN;
   script.onload = async () => {
-    if (typeof window.SUPABASE_URL === 'undefined') {
-      setStatus('error', 'Config missing');
-      return;
-    }
+    if (typeof window.SUPABASE_URL === 'undefined') { setStatus('error', 'Config missing'); return; }
     try {
       sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      
-      // Monitor current login status state automatically
       sb.auth.onAuthStateChange((event, session) => {
         if (session) {
           document.getElementById('auth-screen').style.display = 'none';
@@ -357,9 +391,7 @@ async function init() {
           setStatus('error', 'Protected Context');
         }
       });
-    } catch (e) {
-      setStatus('error', 'Auth failure initialization');
-    }
+    } catch (e) { setStatus('error', 'Init error'); }
   };
   document.head.appendChild(script);
 }
@@ -367,10 +399,9 @@ async function init() {
 async function handleLogin() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-pass').value;
-  if(!email || !password) { alert('Please supply credentials.'); return; }
-  
+  if (!email || !password) { alert('Please supply credentials.'); return; }
   const { error } = await sb.auth.signInWithPassword({ email, password });
-  if(error) alert('Access Denied: ' + error.message);
+  if (error) alert('Access Denied: ' + error.message);
 }
 
 async function handleLogout() {
@@ -384,73 +415,73 @@ async function fetchData() {
     if (error) throw error;
     tickets = data || [];
     render();
-  } catch (e) {
-    setStatus('error', 'Fetch error');
-  }
+  } catch (e) { setStatus('error', 'Fetch error'); }
 }
 
 function setStatus(s, txt) {
   document.getElementById('status-text').textContent = txt;
   const dot = document.getElementById('status-dot');
-  dot.className = 'status-dot';
-  if(s === 'live') dot.classList.add('live');
-  if(s === 'error') dot.classList.add('error');
+  dot.className = 'status-dot' + (s === 'live' ? ' live' : s === 'error' ? ' error' : '');
 }
 
-function render() {
-  const dashTbody = document.getElementById('dash-tbody');
-  const allTbody = document.getElementById('all-tbody');
-  
-  const fTeam = document.getElementById('f-team').value;
-  const fPriority = document.getElementById('f-priority').value;
-  const fAssignee = document.getElementById('f-assignee').value;
-  
-  const filteredTickets = tickets.filter(t => {
-    if (fTeam && t.team !== fTeam) return false;
-    if (fPriority && t.priority !== fPriority) return false;
-    if (fAssignee && t.assignee !== fAssignee) return false;
-    return true;
-  });
-  
-  const slaHtml = (t) => {
-    if (t.status === 'Done') return '<span class="sla-badge sla-done">Completed</span>';
-    if (!t.due_date) return '<span class="sla-none">—</span>';
-    const today = new Date(); today.setHours(0,0,0,0);
-    const due = new Date(t.due_date); due.setHours(0,0,0,0);
-    const diff = Math.round((due - today) / 86400000);
-    if (diff < 0) return `<span class="sla-badge sla-overdue">▲ ${Math.abs(diff)}d overdue</span>`;
-    if (diff === 0) return `<span class="sla-badge sla-today">Due today</span>`;
-    if (diff <= 3) return `<span class="sla-badge sla-soon">${diff}d left</span>`;
-    return `<span class="sla-badge sla-ok">${diff}d left</span>`;
-  };
+// ── Helpers ──────────────────────────────────────────────────────────
 
-  const fmtDate = (iso) => {
-    if (!iso) return '—';
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
-  };
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 
-  const generateRowHtml = (t) => `<tr>
-    <td><span class="ticket-id">${t.ticket_id}</span></td>
-    <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3)">${esc(t.submitter)}</small></td>
-    <td><span class="team-badge">${t.team}</span></td>
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+}
+
+function slaHtml(t) {
+  if (t.status === 'Done') return '<span class="sla sla-done">Completed</span>';
+  if (!t.due_date) return '<span class="sla-none">—</span>';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due = new Date(t.due_date); due.setHours(0,0,0,0);
+  const diff = Math.round((due - today) / 86400000);
+  if (diff < 0)  return `<span class="sla sla-overdue">▲ ${Math.abs(diff)}d overdue</span>`;
+  if (diff === 0) return `<span class="sla sla-today">Due today</span>`;
+  if (diff <= 3)  return `<span class="sla sla-soon">${diff}d left</span>`;
+  return `<span class="sla sla-ok">${diff}d left</span>`;
+}
+
+function statusClass(s) {
+  return 's-' + s.toLowerCase().replace(/\s+/g, '');
+}
+
+function rowHtml(t) {
+  return `<tr>
+    <td><span class="ticket-id">${esc(t.ticket_id)}</span></td>
+    <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3);font-size:11px">${esc(t.submitter)}</small></td>
+    <td><span class="team-badge">${esc(t.team)}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
-    <td><span class="badge s-${t.status.toLowerCase().replace(/ /g,'')}">${t.status}</span></td>
-    <td style="font-size:12px;color:var(--text2)">${t.assignee || 'Unassigned'}</td>
+    <td><span class="badge ${statusClass(t.status)}">${t.status}</span></td>
+    <td style="font-size:12px;color:var(--text2)">${esc(t.assignee || 'Unassigned')}</td>
     <td style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${fmtDate(t.created_at)}</td>
-    <td style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2)">${t.due_date ? fmtDate(t.due_date) : '—'}</td>
+    <td style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2)">${fmtDate(t.due_date)}</td>
     <td>${slaHtml(t)}</td>
     <td>
-      <button class="icon-btn" onclick="openDetail(${t.id})">👁</button>
-      <button class="icon-btn" onclick="openEdit(${t.id})">✎</button>
+      <button class="icon-btn" onclick="openDetail(${t.id})" title="View">👁</button>
+      <button class="icon-btn" onclick="openEdit(${t.id})" title="Edit">✎</button>
     </td>
   </tr>`;
+}
 
-  dashTbody.innerHTML = tickets.map(generateRowHtml).join('');
-  allTbody.innerHTML = filteredTickets.map(generateRowHtml).join('');
-  
-  renderKanban(filteredTickets);
-  
+// ── Render ────────────────────────────────────────────────────────────
+
+function render() {
+  const filtered = tickets.filter(t => {
+    if (filters.team && t.team !== filters.team) return false;
+    if (filters.priority && t.priority !== filters.priority) return false;
+    if (filters.assignee && t.assignee !== filters.assignee) return false;
+    return true;
+  });
+
+  document.getElementById('dash-tbody').innerHTML = tickets.map(rowHtml).join('');
+  document.getElementById('all-tbody').innerHTML = filtered.map(rowHtml).join('');
+  renderKanban(filtered);
+
   document.getElementById('stat-total').textContent = tickets.length;
   document.getElementById('stat-progress').textContent = tickets.filter(t => t.status === 'In Progress').length;
   document.getElementById('stat-urgent').textContent = tickets.filter(t => t.priority === 'Critical' || t.priority === 'High').length;
@@ -458,18 +489,31 @@ function render() {
   document.getElementById('badge-all').textContent = tickets.length;
 }
 
-function renderKanban(filteredList) {
-  const columns = ['New', 'In Progress', 'Review', 'Blocked', 'Done'];
-  document.getElementById('kanban-board').innerHTML = columns.map(col => {
-    const cards = filteredList.filter(t => t.status === col);
+function renderKanban(list) {
+  const cols = ['New', 'In Progress', 'Review', 'Blocked', 'Done'];
+  document.getElementById('kanban-board').innerHTML = cols.map(col => {
+    const cards = list.filter(t => t.status === col);
     return `<div class="k-col">
       <div class="k-header"><span class="k-title">${col}</span><span class="k-count">${cards.length}</span></div>
-      <div class="k-body">${cards.length ? cards.map(t => `<div class="k-card" onclick="openDetail(${t.id})">
-        <div class="k-card-title">${esc(t.title)}</div>
-        <div class="k-card-meta"><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span><span class="k-card-team">${esc(t.team)}</span></div>
-      </div>`).join('') : '<div class="k-empty">empty</div>'}</div>
+      <div class="k-body">${cards.length
+        ? cards.map(t => `<div class="k-card" onclick="openDetail(${t.id})">
+            <div class="k-card-title">${esc(t.title)}</div>
+            <div class="k-card-meta"><span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span><span class="k-card-team">${esc(t.team)}</span></div>
+          </div>`).join('')
+        : '<div class="k-empty">empty</div>'
+      }</div>
     </div>`;
   }).join('');
+}
+
+// ── View switching ────────────────────────────────────────────────────
+
+function setView(v, el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  document.getElementById('page-title').textContent = v === 'dashboard' ? 'Dashboard' : 'All Requests';
 }
 
 function setSubView(v, btn) {
@@ -480,6 +524,45 @@ function setSubView(v, btn) {
   document.getElementById('sub-kanban').style.display = v === 'kanban' ? 'block' : 'none';
 }
 
+// ── Filtering ─────────────────────────────────────────────────────────
+
+function setFilter(field, val, btn) {
+  filters[field] = val;
+  const groupId = { team: 'fp-team', priority: 'fp-priority', assignee: 'fp-assignee' }[field];
+  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => {
+    p.classList.toggle('active', p.dataset.val === val);
+  });
+  render();
+}
+
+// Called from sidebar — switches to All view then applies filter
+function sidebarFilter(field, val, el) {
+  setView('all', document.getElementById('nav-all'));
+  filters[field] = val;
+  // Reset the other filter if switching between team/priority
+  if (field === 'team') {
+    filters.priority = '';
+    syncPills('fp-priority', '');
+  } else if (field === 'priority') {
+    filters.team = '';
+    syncPills('fp-team', '');
+  }
+  syncPills(field === 'team' ? 'fp-team' : 'fp-priority', val);
+  document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function syncPills(groupId, val) {
+  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => {
+    p.classList.toggle('active', p.dataset.val === val);
+  });
+}
+
+// ── Modals ────────────────────────────────────────────────────────────
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
 function openDetail(id) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
@@ -487,15 +570,18 @@ function openDetail(id) {
   document.getElementById('det-body').innerHTML = `
     <div class="detail-grid">
       <div><div class="detail-label">Submitter</div><div class="detail-value">${esc(t.submitter)}</div></div>
-      <div><div class="detail-label">Email Address</div><div class="detail-value"><code>${esc(t.email || 'N/A')}</code></div></div>
-      <div><div class="detail-label">Team</div><div class="detail-value">${t.team}</div></div>
+      <div><div class="detail-label">Email</div><div class="detail-value"><code style="font-size:12px">${esc(t.email || 'N/A')}</code></div></div>
+      <div><div class="detail-label">Team</div><div class="detail-value">${esc(t.team)}</div></div>
       <div><div class="detail-label">Priority</div><div class="detail-value">${t.priority}</div></div>
       <div><div class="detail-label">Status</div><div class="detail-value">${t.status}</div></div>
-      <div><div class="detail-label">Assignee</div><div class="detail-value">${t.assignee}</div></div>
-      <div><div class="detail-label">Expected Date</div><div class="detail-value"><code>${t.due_date || '—'}</code></div></div>
-      <div><div class="detail-label">Request Type</div><div class="detail-value">${t.format || '—'}</div></div>
+      <div><div class="detail-label">Assignee</div><div class="detail-value">${esc(t.assignee)}</div></div>
+      <div><div class="detail-label">Submitted</div><div class="detail-value">${fmtDate(t.created_at)}</div></div>
+      <div><div class="detail-label">Due Date</div><div class="detail-value">${fmtDate(t.due_date)}</div></div>
+      <div><div class="detail-label">SLA</div><div class="detail-value">${slaHtml(t)}</div></div>
+      <div><div class="detail-label">Request Type</div><div class="detail-value">${esc(t.format || '—')}</div></div>
     </div>
-    <div class="detail-label">Description</div><div class="detail-value">${esc(t.description || 'No description provided')}</div>
+    <div class="detail-label">Description</div>
+    <div class="detail-value" style="margin-top:4px;line-height:1.6">${esc(t.description || 'No description provided.')}</div>
   `;
   document.getElementById('modal-detail').classList.add('open');
 }
@@ -503,7 +589,6 @@ function openDetail(id) {
 function openEdit(id) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
-  
   document.getElementById('edit-id').value = t.id;
   document.getElementById('fi-title').value = t.title;
   document.getElementById('fi-desc').value = t.description || '';
@@ -521,11 +606,7 @@ function openEdit(id) {
 
 function openNew() {
   document.getElementById('edit-id').value = '';
-  document.getElementById('fi-title').value = '';
-  document.getElementById('fi-desc').value = '';
-  document.getElementById('fi-submitter').value = '';
-  document.getElementById('fi-email').value = '';
-  document.getElementById('fi-due').value = '';
+  ['fi-title','fi-desc','fi-submitter','fi-email','fi-due'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('fi-team').value = 'Marketing';
   document.getElementById('fi-priority').value = 'High';
   document.getElementById('fi-status').value = 'New';
@@ -536,7 +617,7 @@ function openNew() {
 }
 
 async function save() {
-  const activeRecordId = document.getElementById('edit-id').value;
+  const activeId = document.getElementById('edit-id').value;
   const data = {
     title: document.getElementById('fi-title').value,
     description: document.getElementById('fi-desc').value,
@@ -550,64 +631,24 @@ async function save() {
     format: document.getElementById('fi-format').value
   };
 
-  if (activeRecordId && activeRecordId.trim() !== "") {
-    await sb.from('tickets').update(data).eq('id', parseInt(activeRecordId, 10));
+  if (activeId && activeId.trim() !== '') {
+    await sb.from('tickets').update(data).eq('id', parseInt(activeId, 10));
     if (document.getElementById('fi-notify').checked) {
       try {
         await fetch(`https://formsubmit.co/ajax/${data.email}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ "Status Update": `Your request has been set to "${data.status}".`, "_subject": `[LAAM Analytics] Status Updated` })
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "Status Update": `Your request "${data.title}" has been set to "${data.status}".`, "_subject": "[LAAM Analytics] Status Updated" })
         });
-      } catch(e){}
+      } catch(e) {}
     }
   } else {
     const tid = 'LAAM-' + String(Date.now()).slice(-6);
     await sb.from('tickets').insert([{ ...data, ticket_id: tid }]);
   }
-  
+
   closeModal('modal-form');
   location.reload();
 }
-
-function setView(v, el) {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-  document.getElementById('view-' + v).classList.add('active');
-  document.getElementById('page-title').textContent = v === 'dashboard' ? 'Dashboard' : 'All Requests';
-}
-
-function setFilter(field, val, btn) {
-  // Update hidden selects for render() compatibility
-  document.getElementById('f-' + field).value = val;
-  // Update active pill in the right group
-  const groupId = field === 'team' ? 'fp-team' : field === 'priority' ? 'fp-priority' : 'fp-assignee';
-  document.querySelectorAll('#' + groupId + ' .fpill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-
-function setQuickFilter(field, val, el) {
-  setView('all', document.getElementById('nav-all'));
-  document.getElementById('f-' + field).value = val;
-  // Sync pill UI
-  if (field === 'team') {
-    document.querySelectorAll('#fp-team .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === val));
-    document.getElementById('f-priority').value = '';
-    document.querySelectorAll('#fp-priority .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === ''));
-  } else {
-    document.querySelectorAll('#fp-priority .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === val));
-    document.getElementById('f-team').value = '';
-    document.querySelectorAll('#fp-team .fpill').forEach(p => p.classList.toggle('active', p.dataset.val === ''));
-  }
-  document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 
 init();
 </script>
