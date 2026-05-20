@@ -6,57 +6,40 @@
 <title>Submit a Request — LAAM Analytics</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f5f3ee;
-  --surface: #ffffff;
-  --surface2: #f0ede6;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.15);
-  --text: #1a1a18;
-  --text2: #6b6860;
-  --text3: #a8a49a;
-  --accent: #1a4a2e;
-  --accent-mid: #2d7a4f;
-  --accent-light: #e8f2ec;
-  --red: #c0392b;
-  --radius: 8px;
-  --radius-lg: 14px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 48px 16px 80px; }
-.page { width: 100%; max-width: 500px; }
-.header { margin-bottom: 36px; }
-.logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--accent); }
-.logo-sub { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.14em; font-family: 'IBM Plex Mono', monospace; margin-top: 3px; }
-h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--text); margin-top: 28px; margin-bottom: 8px; line-height: 1.2; }
-.subtitle { font-size: 14px; color: var(--text2); line-height: 1.6; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); }
-.form-group { margin-bottom: 18px; }
-.form-label { display: block; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-.req { color: var(--red); }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,74,46,0.07); }
-.form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
-.form-select { -webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%23a8a49a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-color:var(--bg);padding-right:32px; }
-.hint { font-size: 11px; color: var(--text3); margin-top: 5px; font-family: 'IBM Plex Mono', monospace; line-height: 1.5; }
-.divider { height: 1px; background: var(--border); margin: 22px 0; }
-.priority-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.p-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; }
-.p-opt { position: relative; }
-.p-lbl { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 11px 6px; border-radius: var(--radius); border: 1px solid var(--border); cursor: pointer; transition: all 0.12s; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--text2); }
-.p-lbl:hover { border-color: var(--border2); background: var(--surface2); }
-.p-opt input:checked + .p-lbl { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 500; }
-.pdot { width: 8px; height: 8px; border-radius: 50%; }
-.submit-btn { width: 100%; padding: 13px; border-radius: var(--radius); background: var(--accent); color: #fff; font-size: 14px; font-weight: 600; font-family: 'Fraunces', serif; border: none; cursor: pointer; transition: background 0.15s; letter-spacing: 0.01em; }
-.submit-btn:hover { background: var(--accent-mid); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.success { display: none; text-align: center; padding: 44px 20px; }
-.success-ring { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); border: 1px solid rgba(26,74,46,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
-.success h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
-.success p { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.another { margin-top: 20px; padding: 9px 20px; border-radius: var(--radius); background: transparent; border: 1px solid var(--border2); color: var(--text); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; }
-.another:hover { background: var(--surface2); }
+:root{--bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.15);--text:#1a1a18;--text2:#6b6860;--text3:#a8a49a;--accent:#1a4a2e;--accent-mid:#2d7a4f;--accent-light:#e8f2ec;--red:#c0392b;--radius:8px;--radius-lg:14px;--shadow:0 1px 3px rgba(0,0,0,.06);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:48px 16px 80px;}
+.page{width:100%;max-width:500px;}
+.header{margin-bottom:36px;}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--accent);}
+.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;font-family:'IBM Plex Mono',monospace;margin-top:3px;}
+h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text);margin-top:28px;margin-bottom:8px;line-height:1.2;}
+.subtitle{font-size:14px;color:var(--text2);line-height:1.6;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow);}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.req{color:var(--red);}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,74,46,.07);}
+.form-textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.form-select{-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%23a8a49a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-color:var(--bg);padding-right:32px;}
+.divider{height:1px;background:var(--border);margin:22px 0;}
+.priority-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.p-opt input[type="radio"]{position:absolute;opacity:0;width:0;}
+.p-opt{position:relative;}
+.p-lbl{display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 6px;border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:all .12s;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2);}
+.p-lbl:hover{border-color:var(--border2);background:var(--surface2);}
+.p-opt input:checked+.p-lbl{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:500;}
+.pdot{width:8px;height:8px;border-radius:50%;}
+.submit-btn{width:100%;padding:13px;border-radius:var(--radius);background:var(--accent);color:#fff;font-size:14px;font-weight:600;font-family:'Fraunces',serif;border:none;cursor:pointer;transition:background .15s;letter-spacing:.01em;}
+.submit-btn:hover{background:var(--accent-mid);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;}
+.success{display:none;text-align:center;padding:44px 20px;}
+.success-ring{width:56px;height:56px;border-radius:50%;background:var(--accent-light);border:1px solid rgba(26,74,46,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.success h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:8px;}
+.success p{font-size:13px;color:var(--text2);line-height:1.6;}
+.another{margin-top:20px;padding:9px 20px;border-radius:var(--radius);background:transparent;border:1px solid var(--border2);color:var(--text);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.another:hover{background:var(--surface2);}
 </style>
 </head>
 <body>
@@ -74,20 +57,15 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
         <input class="form-input" id="s-name" type="text" placeholder="Full name">
       </div>
       <div class="form-group">
-        <label class="form-label">Your Email <span class="req">*</span></label>
+        <label class="form-label">Your email <span class="req">*</span></label>
         <input class="form-input" id="s-email" type="email" placeholder="name@laam.pk">
       </div>
       <div class="form-group">
         <label class="form-label">Your team <span class="req">*</span></label>
         <select class="form-select" id="s-team">
           <option value="">Select your team</option>
-          <option>Marketing</option>
-          <option>Product & Eng</option>
-          <option>Growth</option>
-          <option>Commercials</option>
-          <option>Finance</option>
-          <option>Experience</option>
-          <option>Warehouse</option>
+          <option>Marketing</option><option>Product & Eng</option><option>Growth</option>
+          <option>Commercials</option><option>Finance</option><option>Experience</option><option>Warehouse</option>
         </select>
       </div>
       <div class="divider"></div>
@@ -109,11 +87,11 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Expected Date</label>
+        <label class="form-label">Expected date</label>
         <input class="form-input" id="s-due" type="date">
       </div>
       <div class="form-group">
-        <label class="form-label">Request Type</label>
+        <label class="form-label">Request type</label>
         <select class="form-select" id="s-format">
           <option value="New Dashboard">New Dashboard</option>
           <option value="Dashboard Modifications">Dashboard Modifications</option>
@@ -122,7 +100,7 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
           <option value="Other">Other</option>
         </select>
       </div>
-      <button class="submit-btn" id="sub-btn" onclick="submit()">Submit request →</button>
+      <button class="submit-btn" id="sub-btn" onclick="submitRequest()">Submit request →</button>
     </div>
     <div class="success" id="success-wrap">
       <div class="success-ring">
@@ -130,7 +108,7 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
       </div>
       <h2>Request submitted!</h2>
       <p id="success-msg"></p>
-      <button class="another" onclick="reset()">Submit another request</button>
+      <button class="another" onclick="resetForm()">Submit another request</button>
     </div>
   </div>
 </div>
@@ -140,94 +118,120 @@ h1 { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: v
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null;
 
-if (typeof window.SUPABASE_URL !== 'undefined') {
-  const s = document.createElement('script');
-  s.src = SUPABASE_CDN;
-  s.onload = () => { sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); };
-  document.head.appendChild(s);
-}
-
-async function sendEmailAlerts(ticketId, submitterName, submitterEmail, title, description, team, priority, dueDate, formatType) {
-  try {
-    // Sends fully compiled email notification directly to Zain
-    await fetch('https://formsubmit.co/ajax/zain.tahir@laam.pk', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        "New Ticket ID": ticketId,
-        "Submitted By": `${submitterName} (${submitterEmail})`,
-        "Team Dropdown": team,
-        "Request Title": title,
-        "Description": description,
-        "Priority Tier": priority,
-        "Expected Date": dueDate || 'None Provided',
-        "Request Type": formatType,
-        "_subject": `[LAAM Analytics] New Request Filed: ${ticketId}`
-      })
-    });
-
-    // Automatically dispatches a clean verification email copy straight to the requester
-    await fetch(`https://formsubmit.co/ajax/${submitterEmail}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        "Ticket ID": ticketId,
-        "Hello": submitterName,
-        "Message": "Your analytics request has been successfully filed. The data tracking team will review your parameters shortly.",
-        "Request Title": title,
-        "Expected Date": dueDate || 'None Provided',
-        "_subject": `[LAAM Analytics] Request Received Confirmation — ${ticketId}`
-      })
-    });
-  } catch(e) {
-    console.log("Email dispatch service offline:", e);
+const s = document.createElement('script');
+s.src = SUPABASE_CDN;
+s.onload = () => {
+  if (window.SUPABASE_URL) {
+    sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
   }
+};
+document.head.appendChild(s);
+
+// ── Email via Resend (same helper as index.html) ───────────────────────────────
+async function sendEmail(to, subject, html) {
+  if (!window.RESEND_API_KEY) return;
+  const from = window.RESEND_FROM || 'LAAM Analytics <onboarding@resend.dev>';
+  const toArr = Array.isArray(to) ? to : [to];
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method:'POST',
+      headers:{ 'Authorization':'Bearer '+window.RESEND_API_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify({ from, to: toArr, subject, html })
+    });
+  } catch(e) { console.warn('Email failed:',e); }
 }
 
-async function submit() {
-  const name = document.getElementById('s-name').value.trim();
+function emailStyle(){ return `font-family:'DM Sans',Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #e8e4db;border-radius:12px;overflow:hidden;`; }
+function emailHeader(){ return `<div style="background:#1a4a2e;padding:20px 28px"><div style="font-family:'Georgia',serif;font-size:20px;font-weight:600;color:#fff">LAAM Analytics</div><div style="font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-top:3px">Request Tracker</div></div>`; }
+function emailFooter(){ return `<div style="background:#f5f3ee;padding:14px 28px;font-size:11px;color:#a8a49a;border-top:1px solid #e8e4db">This is an automated notification from the LAAM Analytics internal tracker.</div>`; }
+function ticketBlock(t){
+  const rows=[['Ticket ID',t.ticket_id],['Title',t.title],['Team',t.team],['Priority',t.priority],['Request Type',t.format||'—'],['Expected Date',t.due_date||'Not specified']]
+    .map(([l,v])=>`<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`).join('');
+  return `<table style="width:100%;border-collapse:collapse">${rows}</table>`;
+}
+
+async function notifyTeam(t) {
+  const recipients = Array.isArray(window.NOTIFY_EMAILS)
+    ? window.NOTIFY_EMAILS
+    : (window.NOTIFY_EMAILS||'').split(',').map(e=>e.trim()).filter(Boolean);
+  if (!recipients.length) return;
+  const priorityColor = {Critical:'#c0392b',High:'#b8621a',Medium:'#1a3a6b',Low:'#a8a49a'}[t.priority]||'#1a4a2e';
+  const html = `<div style="${emailStyle()}">
+    ${emailHeader()}
+    <div style="padding:24px 28px">
+      <div style="font-size:13px;color:#6b6860;margin-bottom:16px">A new analytics request has been submitted and needs triage.</div>
+      ${ticketBlock(t)}
+      ${t.description?`<div style="margin-top:16px;padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Description:</strong><br>${t.description}</div>`:''}
+      <div style="margin-top:16px">
+        <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:${priorityColor}22;color:${priorityColor};border:1px solid ${priorityColor}44">● ${t.priority} Priority</span>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#a8a49a;font-family:monospace">Submitted by ${t.submitter} (${t.email}) · ${t.team}</div>
+    </div>
+    ${emailFooter()}
+  </div>`;
+  await sendEmail(recipients, `[LAAM Analytics] New request: ${t.ticket_id} — ${t.title}`, html);
+}
+
+async function confirmRequester(t) {
+  if (!t.email) return;
+  const html = `<div style="${emailStyle()}">
+    ${emailHeader()}
+    <div style="padding:24px 28px">
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Request received, ${t.submitter}.</div>
+      <div style="font-size:13px;color:#6b6860;margin-bottom:20px;line-height:1.6">Your analytics request has been logged and the team will review it shortly. Keep this email for your records — you can reference your ticket ID if you need to follow up.</div>
+      ${ticketBlock(t)}
+    </div>
+    ${emailFooter()}
+  </div>`;
+  await sendEmail(t.email, `[LAAM Analytics] Request confirmed — ${t.ticket_id}`, html);
+}
+
+async function submitRequest() {
+  const name  = document.getElementById('s-name').value.trim();
   const email = document.getElementById('s-email').value.trim();
-  const team = document.getElementById('s-team').value;
+  const team  = document.getElementById('s-team').value;
   const title = document.getElementById('s-title').value.trim();
-  const desc = document.getElementById('s-desc').value.trim();
-  const prio = document.querySelector('input[name="prio"]:checked')?.value || 'Medium';
-  const due = document.getElementById('s-due').value || null;
-  const format = document.getElementById('s-format').value;
-  
-  if (!name || !email || !team || !title || !desc) { alert('Please fill in all required fields.'); return; }
-  
+  const desc  = document.getElementById('s-desc').value.trim();
+  const prio  = document.querySelector('input[name="prio"]:checked')?.value || 'High';
+  const due   = document.getElementById('s-due').value || null;
+  const format= document.getElementById('s-format').value;
+
+  if (!name||!email||!team||!title||!desc) { alert('Please fill in all required fields.'); return; }
+
   const btn = document.getElementById('sub-btn');
   btn.disabled = true; btn.textContent = 'Submitting…';
-  
-  const generatedTicketId = 'LAAM-' + String(Date.now()).slice(-6);
-  
-  const data = { 
-    title, description: desc, team, priority: prio,
-    status: 'New', assignee: 'Unassigned', due_date: due, format,
-    submitter: name, email: email, comments: [], ticket_id: generatedTicketId 
-  };
+
+  const ticket_id = 'LAAM-' + String(Date.now()).slice(-6);
+  const ticket = { ticket_id, title, description:desc, team, priority:prio, status:'New',
+    assignee:'Unassigned', due_date:due, format, submitter:name, email, comments:[] };
 
   if (sb) {
-    const { error } = await sb.from('tickets').insert(data);
-    if (error) { alert('Error: ' + error.message); btn.disabled = false; btn.textContent = 'Submit request →'; return; }
-    
-    await sendEmailAlerts(generatedTicketId, name, email, title, desc, team, prio, due, format);
+    const { error } = await sb.from('tickets').insert(ticket);
+    if (error) {
+      alert('Submission failed: ' + error.message);
+      btn.disabled=false; btn.textContent='Submit request →';
+      return;
+    }
   }
 
-  document.getElementById('success-msg').innerHTML = `The analytics team has received your request and will be in touch once it has been triaged. You can track this request using **Ticket ID: ${generatedTicketId}**.`;
+  // Fire both emails in parallel
+  await Promise.all([ notifyTeam(ticket), confirmRequester(ticket) ]);
+
+  document.getElementById('success-msg').textContent =
+    `The analytics team has been notified and you'll receive a confirmation at ${email}. Your ticket ID is ${ticket_id}.`;
   document.getElementById('form-wrap').style.display = 'none';
   document.getElementById('success-wrap').style.display = 'block';
 }
 
-function reset(){
+function resetForm() {
   document.getElementById('form-wrap').style.display = 'block';
   document.getElementById('success-wrap').style.display = 'none';
-  ['s-name','s-email','s-title','s-desc','s-due'].forEach(id => document.getElementById(id).value = '');
+  ['s-name','s-email','s-title','s-desc','s-due'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('s-team').value = '';
   document.getElementById('s-format').value = 'New Dashboard';
   document.getElementById('pr-h').checked = true;
   const btn = document.getElementById('sub-btn');
-  btn.disabled = false; btn.textContent = 'Submit request →';
+  btn.disabled=false; btn.textContent='Submit request →';
 }
 </script>
 </body>
