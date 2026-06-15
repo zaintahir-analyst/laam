@@ -78,6 +78,14 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
         <textarea class="form-textarea" id="s-desc" placeholder="What do you need and why?"></textarea>
       </div>
       <div class="form-group">
+        <label class="form-label">Links <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <textarea class="form-textarea" id="s-links" style="min-height:60px" placeholder="Paste one link per line — Sheet, doc, dashboard, etc."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Attachments <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <input class="form-input" id="s-files" type="file" multiple>
+      </div>
+      <div class="form-group">
         <label class="form-label">Priority <span class="req">*</span></label>
         <div class="priority-grid">
           <div class="p-opt"><input type="radio" name="prio" id="pr-c" value="Critical"><label class="p-lbl" for="pr-c"><span class="pdot" style="background:#c0392b"></span>Critical</label></div>
@@ -149,6 +157,11 @@ function ticketBlock(t){
     .map(([l,v])=>`<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`).join('');
   return `<table style="width:100%;border-collapse:collapse">${rows}</table>`;
 }
+function attachmentsHtml(list){
+  if(!list || !list.length) return '';
+  const rows = list.map(a=>`<a href="${a.url}" style="display:block;font-size:12px;color:#1a4a2e;text-decoration:none;margin:3px 0">${a.type==='link'?'🔗':'📎'} ${a.name}</a>`).join('');
+  return `<div style="margin-top:14px;padding:12px 14px;background:#f5f3ee;border-radius:8px"><div style="font-size:11px;color:#a8a49a;text-transform:uppercase;font-family:monospace;margin-bottom:6px">Attachments &amp; Links (${list.length})</div>${rows}</div>`;
+}
 
 async function notifyTeam(t) {
   const recipients = Array.isArray(window.NOTIFY_EMAILS)
@@ -162,6 +175,7 @@ async function notifyTeam(t) {
       <div style="font-size:13px;color:#6b6860;margin-bottom:16px">A new analytics request has been submitted and needs triage.</div>
       ${ticketBlock(t)}
       ${t.description?`<div style="margin-top:16px;padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Description:</strong><br>${t.description}</div>`:''}
+      ${attachmentsHtml(t.attachments)}
       <div style="margin-top:16px">
         <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:${priorityColor}22;color:${priorityColor};border:1px solid ${priorityColor}44">● ${t.priority} Priority</span>
       </div>
@@ -202,8 +216,29 @@ async function submitRequest() {
   btn.disabled = true; btn.textContent = 'Submitting…';
 
   const ticket_id = 'LAAM-' + String(Date.now()).slice(-6);
+
+  // Links (one per line) + file uploads to Supabase Storage
+  const links = document.getElementById('s-links').value.trim()
+    .split('\n').map(l=>l.trim()).filter(Boolean)
+    .map(url => ({ type:'link', url, name:url }));
+
+  const files = [...document.getElementById('s-files').files];
+  const attachments = [...links];
+
+  if (sb && files.length) {
+    btn.textContent = 'Uploading files…';
+    for (const file of files) {
+      const path = `${ticket_id}/${Date.now()}_${file.name}`;
+      const { error: upErr } = await sb.storage.from('ticket-attachments').upload(path, file);
+      if (upErr) { console.warn('Upload failed:', file.name, upErr.message); continue; }
+      const { data } = sb.storage.from('ticket-attachments').getPublicUrl(path);
+      attachments.push({ type:'file', url:data.publicUrl, name:file.name });
+    }
+    btn.textContent = 'Submitting…';
+  }
+
   const ticket = { ticket_id, title, description:desc, team, priority:prio, status:'New',
-    assignee:'Unassigned', due_date:due, format, submitter:name, email, comments:[] };
+    assignee:'Unassigned', due_date:due, format, submitter:name, email, comments:[], attachments };
 
   if (sb) {
     const { error } = await sb.from('tickets').insert(ticket);
@@ -226,7 +261,8 @@ async function submitRequest() {
 function resetForm() {
   document.getElementById('form-wrap').style.display = 'block';
   document.getElementById('success-wrap').style.display = 'none';
-  ['s-name','s-email','s-title','s-desc','s-due'].forEach(id=>document.getElementById(id).value='');
+  ['s-name','s-email','s-title','s-desc','s-due','s-links'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-files').value = '';
   document.getElementById('s-team').value = '';
   document.getElementById('s-format').value = 'New Dashboard';
   document.getElementById('pr-h').checked = true;
