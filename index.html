@@ -552,6 +552,11 @@ async function notifyStatusUpdate(t) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function attachmentsBlock(list){
+  if(!list || !list.length) return '';
+  const rows = list.map(a=>`<a href="${a.url}" target="_blank" rel="noopener" style="display:block;font-size:13px;color:var(--accent);text-decoration:none;margin:4px 0;word-break:break-all">${a.type==='link'?'🔗':'📎'} ${esc(a.name)}</a>`).join('');
+  return `<div class="detail-label" style="margin-top:14px">Attachments &amp; Links</div><div class="detail-value" style="margin-top:4px">${rows}</div>`;
+}
 function fmtDate(iso) {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
@@ -572,7 +577,7 @@ function sClass(s) { return 's-'+s.toLowerCase().replace(/\s+/g,''); }
 function rowHtml(t) {
   return `<tr>
     <td><span class="ticket-id">${esc(t.ticket_id)}</span></td>
-    <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3);font-size:11px">${esc(t.submitter)}</small></td>
+    <td><strong>${esc(t.title)}</strong>${t.attachments&&t.attachments.length?` <span title="${t.attachments.length} attachment(s)/link(s)" style="font-size:11px">📎${t.attachments.length}</span>`:''}<br><small style="color:var(--text3);font-size:11px">${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${esc(t.team)}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
     <td><span class="badge ${sClass(t.status)}">${t.status}</span></td>
@@ -633,7 +638,7 @@ function renderKanban() {
       <div class="k-header"><span class="k-title">${col}</span><span class="k-count">${cards.length}</span></div>
       <div class="k-body">${cards.length
         ? cards.map(t=>`<div class="k-card" onclick="openDetail(${t.id})">
-            <div class="k-card-title">${esc(t.title)}</div>
+            <div class="k-card-title">${esc(t.title)}${t.attachments&&t.attachments.length?` <span style="font-size:11px">📎${t.attachments.length}</span>`:''}</div>
             <div class="k-card-date">Submitted ${fmtDate(t.created_at)}</div>
             <div class="k-card-meta">
               <span class="badge p-${t.priority.toLowerCase()}">${t.priority}</span>
@@ -713,7 +718,8 @@ function openDetail(id) {
       <div><div class="detail-label">Request Type</div><div class="detail-value">${esc(t.format||'—')}</div></div>
     </div>
     <div class="detail-label">Description</div>
-    <div class="detail-value" style="margin-top:4px;line-height:1.6;white-space:pre-wrap">${esc(t.description||'No description provided.')}</div>`;
+    <div class="detail-value" style="margin-top:4px;line-height:1.6;white-space:pre-wrap">${esc(t.description||'No description provided.')}</div>
+    ${attachmentsBlock(t.attachments)}`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
