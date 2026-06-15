@@ -1,3 +1,7 @@
+-- ⚠️ This file recreates the table from scratch (drops existing data).
+-- It is meant for FRESH installs only. If you already have live tickets,
+-- do NOT re-run this — use migration_attachments.sql instead.
+--
 -- Drop the old table to avoid conflicts
 drop table if exists public.tickets;
 
@@ -16,6 +20,7 @@ create table public.tickets (
   email         text not null, -- Added to collect respondent emails
   format        text,
   comments      jsonb default '[]'::jsonb,
+  attachments   jsonb default '[]'::jsonb, -- [{type:'link'|'file', url, name}]
   created_at    timestamptz default now()
 );
 
