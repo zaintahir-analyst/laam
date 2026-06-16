@@ -771,7 +771,8 @@ async function save() {
     submitter:   document.getElementById('fi-submitter').value.trim(),
     email:       document.getElementById('fi-email').value.trim(),
     due_date:    document.getElementById('fi-due').value || null,
-    format:      document.getElementById('fi-format').value
+    format:      document.getElementById('fi-format').value,
+    notify_update: shouldNotify
   };
 
   try {
