@@ -158,15 +158,18 @@ tr:hover td{background:var(--bg);}
 .detail-value{font-size:13px;margin-top:2px;margin-bottom:10px;}
 .notify-box{background:#fffbf0;border:1px solid #f0d060;padding:10px 12px;border-radius:var(--radius);margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;}
 
-/* ALERT BANNER */
-.alert-banner{border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;font-size:12px;font-family:'IBM Plex Mono',monospace;display:none;}
-.alert-banner.show{display:block;}
-.alert-warn{background:var(--amber-light);border:1px solid rgba(184,98,26,.25);color:var(--amber);}
+/* COMMENTS */
+.comment-section { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; }
+.comment-box { background: var(--surface2); padding: 12px 14px; border-radius: var(--radius); margin-bottom: 10px; }
+.comment-meta { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; margin-bottom: 6px; display: flex; justify-content: space-between; }
+.comment-author { color: var(--accent); font-weight: 500; }
+.comment-text { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
+.comment-input-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.comment-input { min-height: 60px; }
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div class="auth-wrapper" id="auth-screen">
   <div class="auth-card">
     <div class="auth-title">LAAM Analytics</div>
@@ -184,7 +187,6 @@ tr:hover td{background:var(--bg);}
   </div>
 </div>
 
-<!-- APP -->
 <div class="layout" id="app-wrapper">
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -230,11 +232,7 @@ tr:hover td{background:var(--bg);}
     </div>
     <div class="content">
 
-      <!-- DASHBOARD VIEW -->
       <div class="view-section active" id="view-dashboard">
-        <div class="alert-banner alert-warn" id="email-banner">
-          ⚠ Resend not configured — emails disabled. Add RESEND_API_KEY to config.js to enable notifications.
-        </div>
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-label">Total requests</div><div class="stat-value" id="stat-total">0</div></div>
           <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" id="stat-progress">0</div></div>
@@ -249,7 +247,6 @@ tr:hover td{background:var(--bg);}
         </div>
       </div>
 
-      <!-- ALL REQUESTS VIEW -->
       <div class="view-section" id="view-all">
         <div class="filters-bar">
           <div class="filter-row">
@@ -314,7 +311,6 @@ tr:hover td{background:var(--bg);}
   </main>
 </div>
 
-<!-- EDIT / CREATE MODAL -->
 <div class="modal-overlay" id="modal-form">
   <div class="modal">
     <div class="modal-header">
@@ -370,7 +366,6 @@ tr:hover td{background:var(--bg);}
   </div>
 </div>
 
-<!-- DETAIL MODAL -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
     <div class="modal-header">
@@ -389,9 +384,6 @@ tr:hover td{background:var(--bg);}
 // ─────────────────────────────────────────────────────────────────────────────
 // config.js should export on window:
 //   SUPABASE_URL, SUPABASE_ANON_KEY
-//   RESEND_API_KEY          — from resend.com (starts with "re_")
-//   RESEND_FROM             — verified sender, e.g. "LAAM Analytics <noreply@laam.pk>"
-//   NOTIFY_EMAILS           — array or comma-string, e.g. ["zain.tahir@laam.pk","zarrar@laam.pk"]
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
@@ -402,9 +394,6 @@ const filters = { team:'', priority:'', assignee:'' };
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function init() {
-  if (!window.RESEND_API_KEY) {
-    document.getElementById('email-banner').classList.add('show');
-  }
   const s = document.createElement('script');
   s.src = SUPABASE_CDN;
   s.onload = () => {
@@ -445,109 +434,6 @@ async function fetchData() {
 function setStatus(s,txt) {
   document.getElementById('status-text').textContent = txt;
   document.getElementById('status-dot').className = 'status-dot'+(s==='live'?' live':s==='error'?' error':'');
-}
-
-// ── Email via Resend ──────────────────────────────────────────────────────────
-async function sendEmail(to, subject, html) {
-  if (!window.RESEND_API_KEY) return;
-  const from = window.RESEND_FROM || 'LAAM Analytics <onboarding@resend.dev>';
-  const toArr = Array.isArray(to) ? to : [to];
-  try {
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + window.RESEND_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to: toArr, subject, html })
-    });
-  } catch(e) { console.warn('Email send failed:', e); }
-}
-
-function emailStyle() {
-  return `font-family:'DM Sans',Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #e8e4db;border-radius:12px;overflow:hidden;`;
-}
-function emailHeader(color='#1a4a2e') {
-  return `<div style="background:${color};padding:20px 28px"><div style="font-family:'Georgia',serif;font-size:20px;font-weight:600;color:#fff">LAAM Analytics</div><div style="font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-top:3px">Request Tracker</div></div>`;
-}
-function emailFooter() {
-  return `<div style="background:#f5f3ee;padding:14px 28px;font-size:11px;color:#a8a49a;border-top:1px solid #e8e4db">This is an automated notification from the LAAM Analytics internal tracker.</div>`;
-}
-function ticketBlock(t) {
-  const rows = [
-    ['Ticket ID', t.ticket_id],
-    ['Title', t.title],
-    ['Team', t.team],
-    ['Priority', t.priority],
-    ['Status', t.status || 'New'],
-    ['Request Type', t.format || '—'],
-    ['Expected Date', t.due_date || 'Not specified'],
-  ].map(([l,v]) =>
-    `<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`
-  ).join('');
-  return `<table style="width:100%;border-collapse:collapse">${rows}</table>`;
-}
-
-// New ticket → team alert (Zain + Zarrar)
-async function notifyTeam(t) {
-  const recipients = Array.isArray(window.NOTIFY_EMAILS)
-    ? window.NOTIFY_EMAILS
-    : (window.NOTIFY_EMAILS || '').split(',').map(e=>e.trim()).filter(Boolean);
-  if (!recipients.length) return;
-
-  const priorityColor = { Critical:'#c0392b', High:'#b8621a', Medium:'#1a3a6b', Low:'#a8a49a' }[t.priority] || '#1a4a2e';
-  const html = `<div style="${emailStyle()}">
-    ${emailHeader()}
-    <div style="padding:24px 28px">
-      <div style="font-size:13px;color:#6b6860;margin-bottom:16px">A new analytics request has been submitted and needs triage.</div>
-      ${ticketBlock(t)}
-      ${t.description ? `<div style="margin-top:16px;padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Description:</strong><br>${t.description}</div>` : ''}
-      <div style="margin-top:16px">
-        <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:${priorityColor}22;color:${priorityColor};border:1px solid ${priorityColor}44">● ${t.priority} Priority</span>
-        <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:monospace;background:#f0ede6;color:#6b6860;margin-left:6px">📋 ${t.format || 'Request'}</span>
-      </div>
-      <div style="margin-top:6px;font-size:11px;color:#a8a49a;font-family:monospace">Submitted by ${t.submitter} (${t.email || 'no email'}) · ${t.team}</div>
-    </div>
-    ${emailFooter()}
-  </div>`;
-
-  await sendEmail(recipients, `[LAAM Analytics] New request: ${t.ticket_id} — ${t.title}`, html);
-}
-
-// New ticket → confirmation to requester
-async function confirmRequester(t) {
-  if (!t.email) return;
-  const html = `<div style="${emailStyle()}">
-    ${emailHeader()}
-    <div style="padding:24px 28px">
-      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Request received, ${t.submitter}.</div>
-      <div style="font-size:13px;color:#6b6860;margin-bottom:20px;line-height:1.6">Your analytics request has been logged and the team will review it shortly. Keep this email for your records.</div>
-      ${ticketBlock(t)}
-    </div>
-    ${emailFooter()}
-  </div>`;
-
-  await sendEmail(t.email, `[LAAM Analytics] Request confirmed — ${t.ticket_id}`, html);
-}
-
-// Status update → requester (triggered by notify checkbox in edit modal)
-async function notifyStatusUpdate(t) {
-  if (!t.email) return;
-  const statusColor = { New:'#1a4a2e', 'In Progress':'#4a1a6b', Review:'#b8621a', Blocked:'#c0392b', Done:'#1a4a2e' }[t.status] || '#1a4a2e';
-  const html = `<div style="${emailStyle()}">
-    ${emailHeader(statusColor)}
-    <div style="padding:24px 28px">
-      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Update on your request</div>
-      <div style="font-size:13px;color:#6b6860;margin-bottom:20px;line-height:1.6">Hi ${t.submitter}, there's been an update to your analytics request.</div>
-      <div style="padding:14px 18px;background:#f5f3ee;border-radius:10px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
-        <div>
-          <div style="font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase">Status updated to</div>
-          <div style="font-size:18px;font-weight:600;color:${statusColor};margin-top:2px">${t.status}</div>
-        </div>
-      </div>
-      ${ticketBlock(t)}
-    </div>
-    ${emailFooter()}
-  </div>`;
-
-  await sendEmail(t.email, `[LAAM Analytics] Status update — ${t.ticket_id} is now "${t.status}"`, html);
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -698,12 +584,29 @@ function sidebarFilter(field, val, el) {
   render();
 }
 
-// ── Modals ────────────────────────────────────────────────────────────────────
+// ── Modals & Comments ─────────────────────────────────────────────────────────
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function openDetail(id) {
   const t = tickets.find(x=>x.id===id); if(!t) return;
   document.getElementById('det-title').textContent = t.ticket_id;
+  
+  // Parse comments safely
+  const commentsList = typeof t.comments === 'string' ? JSON.parse(t.comments || '[]') : (t.comments || []);
+  
+  // Generate HTML for existing comments
+  const commentsHtml = commentsList.length > 0 
+    ? commentsList.map(c => `
+        <div class="comment-box">
+          <div class="comment-meta">
+            <span class="comment-author">${esc(c.author)}</span>
+            <span>${fmtDate(c.created_at)}</span>
+          </div>
+          <div class="comment-text">${esc(c.text)}</div>
+        </div>
+      `).join('')
+    : '<div style="font-size:12px;color:var(--text3);margin-bottom:12px">No comments yet.</div>';
+
   document.getElementById('det-body').innerHTML = `
     <div class="detail-grid">
       <div><div class="detail-label">Submitter</div><div class="detail-value">${esc(t.submitter)}</div></div>
@@ -719,8 +622,63 @@ function openDetail(id) {
     </div>
     <div class="detail-label">Description</div>
     <div class="detail-value" style="margin-top:4px;line-height:1.6;white-space:pre-wrap">${esc(t.description||'No description provided.')}</div>
-    ${attachmentsBlock(t.attachments)}`;
+    ${attachmentsBlock(t.attachments)}
+    
+    <div class="comment-section">
+      <div class="detail-label" style="margin-bottom:12px">Comments (${commentsList.length})</div>
+      <div id="comments-container">${commentsHtml}</div>
+      
+      <div class="comment-input-wrap">
+        <textarea class="form-textarea comment-input" id="new-comment-text" placeholder="Type a comment to the requester or team..."></textarea>
+        <div style="text-align:right">
+          <button class="btn btn-primary" id="btn-add-comment" onclick="addComment(${t.id})">Post Comment</button>
+        </div>
+      </div>
+    </div>
+  `;
   document.getElementById('modal-detail').classList.add('open');
+}
+
+async function addComment(id) {
+  const textEl = document.getElementById('new-comment-text');
+  const text = textEl.value.trim();
+  if (!text) return;
+
+  const btn = document.getElementById('btn-add-comment');
+  btn.disabled = true; 
+  btn.textContent = 'Posting...';
+
+  try {
+    // 1. Get the current user's email to use as the author name
+    const { data: { session } } = await sb.auth.getSession();
+    const activeEmail = session?.user?.email || 'Team Member';
+    const authorName = activeEmail.split('@')[0];
+
+    // 2. Fetch the current ticket and append the new comment
+    const t = tickets.find(x => x.id === id);
+    const currentComments = typeof t.comments === 'string' ? JSON.parse(t.comments || '[]') : (t.comments || []);
+    
+    const newComment = { 
+      author: authorName, 
+      text: text, 
+      created_at: new Date().toISOString() 
+    };
+    
+    const updatedComments = [...currentComments, newComment];
+
+    // 3. Save to Supabase
+    const { error } = await sb.from('tickets').update({ comments: updatedComments }).eq('id', id);
+    if (error) throw error;
+
+    // 4. Update local data and refresh UI
+    t.comments = updatedComments;
+    openDetail(id); 
+
+  } catch (e) {
+    alert('Failed to post comment: ' + e.message);
+    btn.disabled = false; 
+    btn.textContent = 'Post Comment';
+  }
 }
 
 function openEdit(id) {
@@ -779,20 +737,11 @@ async function save() {
     if (activeId) {
       // ── Update existing ──
       await sb.from('tickets').update(data).eq('id', parseInt(activeId,10));
-      if (shouldNotify) {
-        const existing = tickets.find(t=>t.id==activeId);
-        await notifyStatusUpdate({ ...data, ticket_id: existing?.ticket_id||'' });
-      }
     } else {
       // ── Create new ──
       const ticket_id = 'LAAM-' + String(Date.now()).slice(-6);
       const newTicket = { ...data, ticket_id, status: data.status||'New' };
       await sb.from('tickets').insert([newTicket]);
-      // Fire both emails in parallel
-      await Promise.all([
-        notifyTeam(newTicket),
-        confirmRequester(newTicket)
-      ]);
     }
     closeModal('modal-form');
     location.reload();
