@@ -40,25 +40,34 @@ export default async function handler(req, res) {
 
     // B: TICKET UPDATED
     if (type === 'UPDATE' && old_record) {
-      if (record.status !== old_record.status && requesterEmail) {
+      
+      // Check the state of the frontend toggle!
+      const userWantsToNotify = record.notify_update !== false; 
+
+      // 1. Status Change -> Only email if toggle was checked
+      if (userWantsToNotify && record.status !== old_record.status) {
+        const recipients = requesterEmail ? `${requesterEmail}, ${teamEmails}` : teamEmails;
+
         await transporter.sendMail({
           from: `"LAAM Analytics" <${process.env.GMAIL_USER}>`,
-          to: requesterEmail,
+          to: recipients,
           subject: `Status Update: ${record.ticket_id} is now ${record.status}`,
-          text: `Hi ${record.submitter},\n\nThe status of your request (${record.ticket_id}: ${record.title}) has been changed from "${old_record.status}" to "${record.status}".`
+          text: `Hi ${record.submitter},\n\nThe status of the request (${record.ticket_id}: ${record.title}) has been changed from "${old_record.status}" to "${record.status}".\n\nPlease check the tracker for details.`
         });
       }
 
+      // 2. New Comment -> Always email (comments usually shouldn't be silent)
       const oldComments = typeof old_record.comments === 'string' ? JSON.parse(old_record.comments || '[]') : (old_record.comments || []);
       const newComments = typeof record.comments === 'string' ? JSON.parse(record.comments || '[]') : (record.comments || []);
 
       if (newComments.length > oldComments.length) {
         const latestComment = newComments[newComments.length - 1];
         const commentText = latestComment.text || JSON.stringify(latestComment);
+        const commentRecipients = requesterEmail ? `${requesterEmail}, ${teamEmails}` : teamEmails;
 
         await transporter.sendMail({
           from: `"LAAM Analytics" <${process.env.GMAIL_USER}>`,
-          to: `${requesterEmail}, ${teamEmails}`, 
+          to: commentRecipients, 
           subject: `New Comment on ${record.ticket_id}`,
           text: `A new comment was added to request ${record.ticket_id}:\n\n"${commentText}"\n\nPlease check the dashboard to reply or view details.`
         });
