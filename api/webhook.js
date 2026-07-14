@@ -6,14 +6,33 @@ const emailHeader = (bgColor = '#1a4a2e') => `<div style="background:${bgColor};
 const emailFooter = `<div style="background:#f5f3ee;padding:14px 28px;font-size:11px;color:#a8a49a;border-top:1px solid #e8e4db;line-height:1.5;">This is an automated notification from the LAAM Analytics team.<br><strong>Need to respond?</strong> Just reply directly to this email.</div>`;
 
 const ticketBlock = (record) => {
-  const rows = [
+  const d = record.details || {};
+  
+  let rows = [
+    ['Category', record.request_category],
     ['Ticket ID', record.ticket_id],
     ['Title', record.title],
     ['Team', record.team],
     ['Priority', record.priority],
     ['Status', record.status || 'New'],
-  ].map(([l, v]) => `<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`).join('');
-  return `<table style="width:100%;border-collapse:collapse;margin-top:16px;margin-bottom:16px">${rows}</table>`;
+  ];
+
+  if (record.request_category === 'Access Request') {
+    rows.push(['Access Level', d.access_level]);
+    rows.push(['Scope', d.scope || 'All']);
+    rows.push(['Approver', d.approver]);
+  } else {
+    rows.push(['Impact Radius', d.blocked_audience || '—']);
+    rows.push(['Delay Impact', d.delay_impact || '—']);
+  }
+
+  const htmlRows = rows.map(([l, v]) => `<tr><td style="padding:7px 0;font-size:11px;color:#a8a49a;font-family:monospace;text-transform:uppercase;width:130px;vertical-align:top">${l}</td><td style="padding:7px 0;font-size:13px;color:#1a1a18">${v}</td></tr>`).join('');
+  
+  const extraContext = record.request_category === 'Data Request' && d.business_case 
+    ? `<div style="margin-top:16px;padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Business Use Case:</strong><br>${d.business_case}</div>`
+    : '';
+
+  return `<table style="width:100%;border-collapse:collapse;margin-top:16px;margin-bottom:16px">${htmlRows}</table>${extraContext}`;
 };
 
 export default async function handler(req, res) {
@@ -33,12 +52,8 @@ export default async function handler(req, res) {
     const teamEmails = "zain.tahir@laam.pk, zarrar.ahmed@laam.pk";
     const requesterEmail = record.email;
 
-    // ==========================================
-    // TRIGGER A: NEW TICKET SUBMITTED
-    // ==========================================
+    // A: NEW TICKET
     if (type === 'INSERT') {
-      
-      // Email Team
       await transporter.sendMail({
         from: `"LAAM Analytics" <${process.env.GMAIL_USER}>`,
         to: teamEmails,
@@ -47,12 +62,11 @@ export default async function handler(req, res) {
           <div style="padding:24px 28px">
             <div style="font-size:14px;color:#1a1a18;margin-bottom:12px"><strong>${record.submitter}</strong> submitted a new analytics request.</div>
             ${ticketBlock(record)}
-            <div style="padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>Description:</strong><br>${record.description}</div>
+            <div style="padding:12px 14px;background:#f5f3ee;border-radius:8px;font-size:13px;color:#1a1a18;line-height:1.6"><strong>The Ask:</strong><br>${record.description}</div>
           </div>
         ${emailFooter}</div>`
       });
 
-      // Email Requester
       if (requesterEmail) {
         await transporter.sendMail({
           from: `"LAAM Analytics" <${process.env.GMAIL_USER}>`,
@@ -61,7 +75,7 @@ export default async function handler(req, res) {
           html: `<div style="${emailStyle}">${emailHeader()}
             <div style="padding:24px 28px">
               <div style="font-size:16px;font-weight:600;margin-bottom:6px">Request received, ${record.submitter}.</div>
-              <div style="font-size:13px;color:#6b6860;line-height:1.6">Your analytics request has been logged. The team will review it shortly. Keep this email for your records, or reply to it to add more context.</div>
+              <div style="font-size:13px;color:#6b6860;line-height:1.6">Your analytics request has been logged. Keep this email for your records, or reply to it directly to add more context.</div>
               ${ticketBlock(record)}
             </div>
           ${emailFooter}</div>`
@@ -69,18 +83,13 @@ export default async function handler(req, res) {
       }
     }
 
-    // ==========================================
-    // TRIGGER B: TICKET UPDATED
-    // ==========================================
+    // B: TICKET UPDATED
     if (type === 'UPDATE' && old_record) {
       
       const userWantsToNotify = record.notify_update !== false; 
 
-      // 1. Status Change
       if (userWantsToNotify && record.status !== old_record.status) {
         const recipients = requesterEmail ? `${requesterEmail}, ${teamEmails}` : teamEmails;
-        
-        // Color code the header based on status
         const statusColor = { 'New': '#1a4a2e', 'In Progress': '#4a1a6b', 'Review': '#b8621a', 'Blocked': '#c0392b', 'Done': '#1a4a2e' }[record.status] || '#1a4a2e';
 
         await transporter.sendMail({
@@ -103,7 +112,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // 2. New Comment
       const oldComments = typeof old_record.comments === 'string' ? JSON.parse(old_record.comments || '[]') : (old_record.comments || []);
       const newComments = typeof record.comments === 'string' ? JSON.parse(record.comments || '[]') : (record.comments || []);
 
@@ -131,7 +139,6 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({ success: true });
-
   } catch (error) {
     console.error("Webhook processing error:", error);
     return res.status(500).json({ error: 'Internal Server Error' });
