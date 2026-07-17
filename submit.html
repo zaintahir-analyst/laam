@@ -95,11 +95,11 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
       <!-- BRANCH 1: DATA REQUEST -->
       <!-- ============================================== -->
       <div id="branch-data">
-        <div class="form-group"><label class="form-label">Request Title <span class="req">*</span></label><input class="form-input" id="d-title" type="text" placeholder="e.g. Monthly revenue breakdown by channel"></div>
+        <div class="form-group"><label class="form-label">Request Title <span class="req">*</span></label><input class="form-input" id="d-title" type="text" placeholder=""></div>
         <div class="form-group">
           <label class="form-label">What do you need? <span class="req">*</span></label>
           <div class="form-desc">Plain description of the deliverable (dashboard, CSV, etc.)</div>
-          <textarea class="form-textarea" id="d-ask" placeholder="Describe the deliverable..."></textarea>
+          <textarea class="form-textarea" id="d-ask" placeholder=""></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Business Use Case <span class="req">*</span></label>
@@ -163,23 +163,29 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
       <!-- ============================================== -->
       <div id="branch-access" style="display:none">
         <div class="form-group"><label class="form-label">What do you need access to? <span class="req">*</span></label>
-          <select class="form-select" id="a-tool">
+          <select class="form-select" id="a-tool" onchange="toggleReason('a-tool', 'a-tool-other-wrap', 'Other')">
             <option>Metabase</option>
+            <option>GA4</option>
+            <option>StatSig</option>
             <option>Other</option>
           </select>
+          <div id="a-tool-other-wrap" style="display:none;margin-top:8px">
+            <input class="form-input" id="a-tool-other" type="text" placeholder="Please specify the tool">
+          </div>
         </div>
         <div class="form-group"><label class="form-label">Level of access <span class="req">*</span></label>
           <select class="form-select" id="a-level">
             <option value="">Select level</option>
-            <option>Viewer (view existing dashboards only)</option>
-            <option>Editor (build/edit dashboards & questions)</option>
-            <option>SQL access (write native queries)</option>
+            <option>Viewer / Read-only</option>
+            <option>Editor / Standard Access</option>
+            <option>SQL access (Metabase only)</option>
             <option>Admin</option>
+            <option>Other (Please specify in Justification)</option>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Collections / Dashboards</label>
-          <div class="form-desc">Which specific areas do you need? (e.g. "Marketing collection")</div>
+          <label class="form-label">Collections / Scope</label>
+          <div class="form-desc">Which specific areas or dashboards do you need? (e.g. "Marketing collection")</div>
           <input class="form-input" id="a-scope" type="text">
         </div>
         <div class="form-group">
@@ -215,6 +221,10 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
       <div class="form-group">
         <label class="form-label">Links <span style="color:var(--text3);font-weight:400">(optional)</span></label>
         <textarea class="form-textarea" id="s-links" style="min-height:60px" placeholder="Paste one link per line"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Attachments <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+        <input class="form-input" id="s-files" type="file" multiple>
       </div>
       <button class="submit-btn" id="sub-btn" onclick="submitRequest()">Submit request →</button>
     </div>
@@ -318,7 +328,9 @@ async function submitRequest() {
       priority_reason: prioReason
     };
   } else {
-    const tool = document.getElementById('a-tool').value;
+    let tool = document.getElementById('a-tool').value;
+    if (tool === 'Other') tool = document.getElementById('a-tool-other').value.trim() || 'Other';
+    
     const level = document.getElementById('a-level').value;
     const justification = document.getElementById('a-justification').value.trim();
     const duration = document.getElementById('a-duration').value;
@@ -326,7 +338,7 @@ async function submitRequest() {
     const approver = document.getElementById('a-approver').value.trim();
     const urgency = document.getElementById('a-urgency').value; 
 
-    if (!level || !justification || !approver) return alert('Please fill all required Access Request fields.');
+    if (!level || !justification || !approver || (document.getElementById('a-tool').value === 'Other' && !tool)) return alert('Please fill all required Access Request fields.');
     if (duration === 'Temporary' && !expiry) return alert('Please select an expiry date for temporary access.');
 
     payload.title = `Access Request: ${tool} (${level})`;
@@ -343,7 +355,21 @@ async function submitRequest() {
     };
   }
 
-  btn.disabled = true; btn.textContent = 'Submitting…';
+  btn.disabled = true; btn.textContent = 'Uploading files…';
+
+  // Process Files
+  const files = [...document.getElementById('s-files').files];
+  if (sb && files.length) {
+    for (const file of files) {
+      const path = `${payload.ticket_id}/${Date.now()}_${file.name}`;
+      const { error: upErr } = await sb.storage.from('ticket-attachments').upload(path, file);
+      if (upErr) { console.warn('Upload failed:', file.name, upErr.message); continue; }
+      const { data } = sb.storage.from('ticket-attachments').getPublicUrl(path);
+      payload.attachments.push({ type:'file', url:data.publicUrl, name:file.name });
+    }
+  }
+
+  btn.textContent = 'Submitting…';
 
   if (sb) {
     const { error } = await sb.from('tickets').insert(payload);
