@@ -6,7 +6,7 @@
 <title>Submit a Request — LAAM Analytics</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.15);--text:#1a1a18;--text2:#6b6860;--text3:#a8a49a;--accent:#1a4a2e;--accent-mid:#2d7a4f;--accent-light:#e8f2ec;--red:#c0392b;--radius:8px;--radius-lg:14px;--shadow:0 1px 3px rgba(0,0,0,.06);}
+:root{--bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.15);--text:#1a1a18;--text2:#5a5750;--text3:#7a776d;--accent:#1a4a2e;--accent-mid:#2d7a4f;--accent-light:#e8f2ec;--red:#c0392b;--radius:8px;--radius-lg:14px;--shadow:0 1px 3px rgba(0,0,0,.06);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:48px 16px 80px;}
 .page{width:100%;max-width:540px;}
@@ -17,13 +17,13 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
 .subtitle{font-size:14px;color:var(--text2);line-height:1.6;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow);}
 .form-group{margin-bottom:18px;}
-.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:500;}
 .form-desc{font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.4;}
 .req{color:var(--red);}
 .form-input,.form-select,.form-textarea{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,74,46,.07);}
 .form-textarea{resize:vertical;min-height:80px;line-height:1.6;}
-.form-select{-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%23a8a49a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-color:var(--bg);padding-right:32px;}
+.form-select{-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%237a776d' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-color:var(--bg);padding-right:32px;}
 .divider{height:1px;background:var(--border);margin:22px 0;}
 
 /* ROUTER CARDS */
@@ -279,7 +279,7 @@ async function submitRequest() {
     email: email,
     team: team,
     status: 'New',
-    assignee: 'Unassigned',
+    assignee: activeBranch === 'access' ? 'Zarrar' : 'Unassigned', // Auto-assign Zarrar here
     request_category: activeBranch === 'data' ? 'Data Request' : 'Access Request',
     details: {},
     attachments: [],
