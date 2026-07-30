@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LAAM Analytics — Request Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--surface3:#e8e4db;
   --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.15);
-  --text:#1a1a18;--text2:#6b6860;--text3:#a8a49a;
+  --text:#1a1a18;--text2:#5a5750;--text3:#7a776d;
   --accent:#1a4a2e;--accent-light:#e8f2ec;--accent-mid:#2d7a4f;
   --red:#c0392b;--red-light:#fdf0ee;
   --amber:#b8621a;--amber-light:#fef5ec;
@@ -19,7 +19,7 @@
   --shadow:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 16px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;font-weight:400;}
 
 /* AUTH */
 .auth-wrapper{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
@@ -77,15 +77,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .fpill.active.p-medium{background:var(--blue-light);border-color:rgba(26,58,107,.2);color:var(--blue);}
 .fpill.active.p-low{background:var(--surface2);border-color:var(--border2);color:var(--text2);}
 .view-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:3px;gap:2px;}
-.view-btn{padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:12px;}
-.view-btn.active{background:var(--surface2);color:var(--text);font-weight:500;}
+.view-btn{padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;}
+.view-btn.active{background:var(--surface2);color:var(--text);font-weight:600;}
 
 /* TABLE */
 .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);}
 table{width:100%;border-collapse:collapse;}
 thead{background:var(--surface2);}
-th{padding:10px 14px;text-align:left;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
-td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;}
+th{padding:10px 14px;text-align:left;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2);text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:600;}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:400;color:var(--text);}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--bg);}
 .ticket-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);}
@@ -112,17 +112,17 @@ tr:hover td{background:var(--bg);}
 .sla-ok{background:var(--accent-light);color:var(--accent);}
 .sla-done{background:var(--surface2);color:var(--text3);}
 .sla-none{color:var(--text3);font-size:11px;}
-.icon-btn{width:26px;height:26px;border:1px solid var(--border);background:transparent;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;margin-right:2px;}
-.icon-btn:hover{background:var(--surface2);}
+.icon-btn{width:26px;height:26px;border:1px solid transparent;background:transparent;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;margin-right:2px;font-size:14px;}
+.icon-btn:hover{background:var(--surface2);border-color:var(--border);}
+
+/* DATE INPUTS */
+.date-input{border:1px solid var(--border);background:var(--surface);border-radius:20px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text2);padding:3px 8px;outline:none;cursor:pointer;height:24px;}
+.date-input:focus{border-color:var(--accent);}
+.date-reset{padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .12s;}
+.date-reset:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
 
 /* KANBAN */
 .kanban-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);}
-.kanban-toolbar-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
-.kanban-date-input{border:1px solid var(--border);background:var(--surface2);border-radius:var(--radius);font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);padding:4px 8px;outline:none;cursor:pointer;}
-.kanban-date-input:focus{border-color:var(--accent);}
-.kanban-sep{color:var(--text3);font-size:13px;font-family:'IBM Plex Mono',monospace;}
-.kanban-reset{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .12s;}
-.kanban-reset:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
 .kanban-summary{margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);}
 .kanban-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:start;}
 .k-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);}
@@ -146,7 +146,7 @@ tr:hover td{background:var(--bg);}
 .modal-title{font-family:'Fraunces',serif;font-size:18px;font-weight:600;}
 .modal-close{cursor:pointer;background:transparent;border:none;font-size:20px;}
 .form-group{margin-bottom:14px;}
-.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;margin-bottom:5px;}
+.form-label{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;margin-bottom:5px;font-weight:500;}
 .form-input,.form-select,.form-textarea{width:100%;padding:8px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .btn{padding:8px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:#fff;font-family:'DM Sans',sans-serif;}
@@ -154,7 +154,7 @@ tr:hover td{background:var(--bg);}
 .btn-primary:hover{background:var(--accent-mid);}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.detail-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;}
+.detail-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);text-transform:uppercase;font-weight:500;}
 .detail-value{font-size:13px;margin-top:2px;margin-bottom:10px;}
 .notify-box{background:#fffbf0;border:1px solid #f0d060;padding:10px 12px;border-radius:var(--radius);margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;}
 
@@ -228,9 +228,18 @@ tr:hover td{background:var(--bg);}
   </aside>
 
   <main class="main">
+    <!-- TOPBAR WITH GLOBAL CATEGORY TOGGLE -->
     <div class="topbar">
-      <div class="page-title" id="page-title">Dashboard</div>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="view-toggle" style="background:var(--surface2)">
+          <button class="view-btn active" onclick="setGlobalCategory('All', this)">All Types</button>
+          <button class="view-btn" onclick="setGlobalCategory('Data Request', this)">📊 Data Requests</button>
+          <button class="view-btn" onclick="setGlobalCategory('Access Request', this)">🔑 Access Requests</button>
+        </div>
+      </div>
     </div>
+
     <div class="content">
 
       <!-- DASHBOARD VIEW -->
@@ -252,6 +261,30 @@ tr:hover td{background:var(--bg);}
       <!-- ALL REQUESTS VIEW -->
       <div class="view-section" id="view-all">
         <div class="filters-bar">
+          
+          <div class="filter-row">
+            <span class="filter-label">Status</span>
+            <div class="pill-group" id="fp-status">
+              <button class="fpill active" data-val="" onclick="setFilter('status','',this)">All</button>
+              <button class="fpill" data-val="New" onclick="setFilter('status','New',this)">New</button>
+              <button class="fpill" data-val="In Progress" onclick="setFilter('status','In Progress',this)">In Progress</button>
+              <button class="fpill" data-val="Review" onclick="setFilter('status','Review',this)">Review</button>
+              <button class="fpill" data-val="Blocked" onclick="setFilter('status','Blocked',this)">Blocked</button>
+              <button class="fpill" data-val="Done" onclick="setFilter('status','Done',this)">Done</button>
+            </div>
+            
+            <span class="filter-label" style="margin-left:16px">Date Range</span>
+            <input type="date" id="f-from" class="date-input" onchange="render()">
+            <span style="color:var(--text3);font-size:12px">→</span>
+            <input type="date" id="f-to" class="date-input" onchange="render()">
+            <button class="date-reset" onclick="resetDates()">Clear</button>
+
+            <div class="view-toggle" style="margin-left:auto">
+              <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
+              <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
+            </div>
+          </div>
+
           <div class="filter-row">
             <span class="filter-label">Team</span>
             <div class="pill-group" id="fp-team">
@@ -265,6 +298,7 @@ tr:hover td{background:var(--bg);}
               <button class="fpill" data-val="Warehouse" onclick="setFilter('team','Warehouse',this)">Warehouse</button>
             </div>
           </div>
+
           <div class="filter-row">
             <span class="filter-label">Priority</span>
             <div class="pill-group" id="fp-priority">
@@ -274,6 +308,7 @@ tr:hover td{background:var(--bg);}
               <button class="fpill" data-val="Medium" onclick="setFilter('priority','Medium',this)">Medium</button>
               <button class="fpill" data-val="Low" onclick="setFilter('priority','Low',this)">Low</button>
             </div>
+            
             <span class="filter-label" style="margin-left:16px">Assignee</span>
             <div class="pill-group" id="fp-assignee">
               <button class="fpill active" data-val="" onclick="setFilter('assignee','',this)">All</button>
@@ -281,11 +316,8 @@ tr:hover td{background:var(--bg);}
               <button class="fpill" data-val="Zain" onclick="setFilter('assignee','Zain',this)">Zain</button>
               <button class="fpill" data-val="Zarrar" onclick="setFilter('assignee','Zarrar',this)">Zarrar</button>
             </div>
-            <div class="view-toggle" style="margin-left:auto">
-              <button class="view-btn active" id="vb-table" onclick="setSubView('table',this)">Table</button>
-              <button class="view-btn" id="vb-kanban" onclick="setSubView('kanban',this)">Kanban</button>
-            </div>
           </div>
+
         </div>
 
         <div id="sub-table">
@@ -299,11 +331,6 @@ tr:hover td{background:var(--bg);}
 
         <div id="sub-kanban" style="display:none">
           <div class="kanban-toolbar">
-            <span class="kanban-toolbar-label">Date range</span>
-            <input type="date" id="k-from" class="kanban-date-input" onchange="renderKanban()">
-            <span class="kanban-sep">→</span>
-            <input type="date" id="k-to" class="kanban-date-input" onchange="renderKanban()">
-            <button class="kanban-reset" onclick="resetKanbanDates()">Clear</button>
             <span class="kanban-summary" id="kanban-summary"></span>
           </div>
           <div class="kanban-board" id="kanban-board"></div>
@@ -374,7 +401,8 @@ tr:hover td{background:var(--bg);}
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
 let sb = null;
 let tickets = [];
-const filters = { team:'', priority:'', assignee:'' };
+const filters = { team:'', priority:'', assignee:'', status:'' };
+let globalCategory = 'All';
 
 // ── Init ──
 async function init() {
@@ -447,7 +475,7 @@ function sClass(s) { return 's-'+s.toLowerCase().replace(/\s+/g,''); }
 function rowHtml(t) {
   const isAccess = t.request_category === 'Access Request';
   return `<tr>
-    <td><span class="ticket-id">${esc(t.ticket_id)}</span><br><span style="font-size:10px;color:var(--text3)">${isAccess?'🔑 Access':'📊 Data'}</span></td>
+    <td><span class="ticket-id">${esc(t.ticket_id)}</span><br><span style="font-size:10px;color:var(--text3);font-weight:500;">${isAccess?'🔑 Access':'📊 Data'}</span></td>
     <td><strong>${esc(t.title)}</strong><br><small style="color:var(--text3);font-size:11px">${esc(t.submitter)}</small></td>
     <td><span class="team-badge">${esc(t.team)}</span></td>
     <td><span class="badge p-${t.priority.toLowerCase()}"><span class="badge-dot"></span>${t.priority}</span></td>
@@ -459,43 +487,78 @@ function rowHtml(t) {
     <td>
       <button class="icon-btn" onclick="openDetail(${t.id})" title="View">👁</button>
       <button class="icon-btn" onclick="openEdit(${t.id})" title="Edit">✎</button>
+      <button class="icon-btn" onclick="deleteRequest(${t.id})" title="Delete" style="color:var(--red);">🗑</button>
     </td>
   </tr>`;
 }
 
-// ── Render ──
-function filtered() {
-  return tickets.filter(t => {
+// ── Delete ──
+async function deleteRequest(id) {
+  if(!confirm('Are you sure you want to permanently delete this request? This action cannot be undone.')) return;
+  const { error } = await sb.from('tickets').delete().eq('id', id);
+  if (error) {
+    alert('Error deleting request: ' + error.message);
+  } else {
+    tickets = tickets.filter(t => t.id !== id);
+    render();
+  }
+}
+
+// ── Render & Filters ──
+function setGlobalCategory(cat, btn) {
+  globalCategory = cat;
+  document.querySelectorAll('.topbar .view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function resetDates() {
+  document.getElementById('f-from').value = ''; 
+  document.getElementById('f-to').value = ''; 
+  render();
+}
+
+function filtered(baseList) {
+  const fromVal = document.getElementById('f-from')?.value;
+  const toVal   = document.getElementById('f-to')?.value;
+  const from = fromVal ? new Date(fromVal) : null;
+  const to   = toVal   ? new Date(toVal)   : null;
+  if (to) to.setHours(23,59,59,999);
+
+  return baseList.filter(t => {
     if (filters.team && t.team !== filters.team) return false;
     if (filters.priority && t.priority !== filters.priority) return false;
     if (filters.assignee && t.assignee !== filters.assignee) return false;
+    if (filters.status && t.status !== filters.status) return false;
+    
+    const c = new Date(t.created_at);
+    if (from && c < from) return false;
+    if (to && c > to) return false;
+
     return true;
   });
 }
+
 function render() {
-  const f = filtered();
-  document.getElementById('dash-tbody').innerHTML = tickets.map(rowHtml).join('');
+  // Apply Global Category to base list for both dashboard and views
+  const baseList = globalCategory === 'All' ? tickets : tickets.filter(t => t.request_category === globalCategory);
+
+  // Update Dashboard
+  document.getElementById('dash-tbody').innerHTML = baseList.map(rowHtml).join('');
+  document.getElementById('stat-total').textContent    = baseList.length;
+  document.getElementById('stat-progress').textContent = baseList.filter(t=>t.status==='In Progress').length;
+  document.getElementById('stat-urgent').textContent   = baseList.filter(t=>['Critical','High'].includes(t.priority)).length;
+  document.getElementById('stat-done').textContent     = baseList.filter(t=>t.status==='Done').length;
+  document.getElementById('badge-all').textContent     = baseList.length;
+
+  // Apply Secondary Filters (Team, Priority, Dates) for All Requests view
+  const f = filtered(baseList);
   document.getElementById('all-tbody').innerHTML  = f.map(rowHtml).join('');
-  document.getElementById('stat-total').textContent    = tickets.length;
-  document.getElementById('stat-progress').textContent = tickets.filter(t=>t.status==='In Progress').length;
-  document.getElementById('stat-urgent').textContent   = tickets.filter(t=>['Critical','High'].includes(t.priority)).length;
-  document.getElementById('stat-done').textContent     = tickets.filter(t=>t.status==='Done').length;
-  document.getElementById('badge-all').textContent     = tickets.length;
-  renderKanban();
+  renderKanban(f);
 }
 
 // ── Kanban ──
-function renderKanban() {
-  let list = filtered();
-  const fromVal = document.getElementById('k-from')?.value;
-  const toVal   = document.getElementById('k-to')?.value;
-  if (fromVal || toVal) {
-    const from = fromVal ? new Date(fromVal) : null;
-    const to   = toVal   ? new Date(toVal)   : null;
-    if (to) to.setHours(23,59,59,999);
-    list = list.filter(t => { const c = new Date(t.created_at); return (!from || c >= from) && (!to || c <= to); });
-  }
-
+function renderKanban(list) {
   const cols = ['New','In Progress','Review','Blocked','Done'];
   document.getElementById('kanban-board').innerHTML = cols.map(col => {
     const cards = list.filter(t => t.status === col);
@@ -515,20 +578,18 @@ function renderKanban() {
     </div>`;
   }).join('');
 }
-function resetKanbanDates() {
-  document.getElementById('k-from').value = ''; document.getElementById('k-to').value = ''; renderKanban();
-}
+
 
 // ── View Switching ──
 function setView(v, el) {
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.sidebar .nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   document.getElementById('page-title').textContent = v==='dashboard' ? 'Dashboard' : 'All Requests';
 }
 function setSubView(v, btn) {
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filters-bar .view-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('sub-table').style.display  = v==='table'  ? 'block':'none';
   document.getElementById('sub-kanban').style.display = v==='kanban' ? 'block':'none';
@@ -556,7 +617,7 @@ function openDetail(id) {
   document.getElementById('det-title').textContent = t.ticket_id;
   const d = t.details || {};
   
-let extraDetails = '';
+  let extraDetails = '';
   if (t.request_category === 'Access Request') {
     extraDetails = `
       <div><div class="detail-label">Access Level</div><div class="detail-value">${esc(d.access_level)}</div></div>
@@ -569,7 +630,6 @@ let extraDetails = '';
       ${d.deadline_reason ? `<div><div class="detail-label">Deadline Reason</div><div class="detail-value">${esc(d.deadline_reason)}</div></div>` : ''}
     `;
   }
-  
 
   const commentsList = typeof t.comments === 'string' ? JSON.parse(t.comments || '[]') : (t.comments || []);
   const commentsHtml = commentsList.length > 0 
