@@ -101,6 +101,12 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
           <div class="form-desc">Plain description of the deliverable (dashboard, CSV, etc.)</div>
           <textarea class="form-textarea" id="d-ask" placeholder=""></textarea>
         </div>
+        
+        <div class="form-group">
+          <label class="form-label">Existing link to Metabase <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+          <textarea class="form-textarea" id="d-links" style="min-height:60px" placeholder="Paste one link per line"></textarea>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Business Use Case <span class="req">*</span></label>
           <div class="form-desc">What decision, action, or process depends on this? What happens without it?</div>
@@ -173,40 +179,29 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
             <input class="form-input" id="a-tool-other" type="text" placeholder="Please specify the tool">
           </div>
         </div>
+        
         <div class="form-group"><label class="form-label">Level of access <span class="req">*</span></label>
           <select class="form-select" id="a-level">
             <option value="">Select level</option>
             <option>Viewer / Read-only</option>
-            <option>Editor / Standard Access</option>
-            <option>SQL access (Metabase only)</option>
+            <option>Editor / Analyst Access</option>
             <option>Admin</option>
-            <option>Other (Please specify in Justification)</option>
+            <option>Other (Please specify in Use Case)</option>
           </select>
         </div>
+        
         <div class="form-group">
-          <label class="form-label">Collections / Scope</label>
-          <div class="form-desc">Which specific areas or dashboards do you need? (e.g. "Marketing collection")</div>
-          <input class="form-input" id="a-scope" type="text">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Business Justification <span class="req">*</span></label>
+          <label class="form-label">Business Use Case <span class="req">*</span></label>
           <div class="form-desc">Why do you need this capability?</div>
-          <textarea class="form-textarea" id="a-justification" placeholder=""></textarea>
+          <textarea class="form-textarea" id="a-usecase" placeholder=""></textarea>
         </div>
-        <div class="form-group"><label class="form-label">Duration <span class="req">*</span></label>
-          <select class="form-select" id="a-duration" onchange="toggleReason('a-duration', 'a-expiry-wrap', 'Temporary')">
-            <option>Permanent</option>
-            <option>Temporary</option>
-          </select>
-          <div id="a-expiry-wrap" style="display:none;margin-top:8px">
-            <label class="form-label">Expiry Date <span class="req">*</span></label>
-            <input class="form-input" id="a-expiry" type="date">
-          </div>
-        </div>
+
         <div class="form-group">
-          <label class="form-label">Approving Manager <span class="req">*</span></label>
-          <input class="form-input" id="a-approver" type="text" placeholder="Name / Email of person signing off">
+          <label class="form-label">Reference Link <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+          <div class="form-desc">Please share a link to the specific dashboard, report, or data you are trying to access.</div>
+          <textarea class="form-textarea" id="a-links" style="min-height:60px" placeholder="Paste one link per line"></textarea>
         </div>
+        
         <div class="form-group"><label class="form-label">Urgency <span class="req">*</span></label>
           <select class="form-select" id="a-urgency">
             <option value="Medium">Needed this week</option>
@@ -218,10 +213,6 @@ h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--text)
 
       <!-- SHARED FOOTER -->
       <div class="divider"></div>
-      <div class="form-group">
-        <label class="form-label">Links <span style="color:var(--text3);font-weight:400">(optional)</span></label>
-        <textarea class="form-textarea" id="s-links" style="min-height:60px" placeholder="Paste one link per line"></textarea>
-      </div>
       <div class="form-group">
         <label class="form-label">Attachments <span style="color:var(--text3);font-weight:400">(optional)</span></label>
         <input class="form-input" id="s-files" type="file" multiple>
@@ -295,8 +286,9 @@ async function submitRequest() {
     notify_update: true
   };
 
-  // Process Links
-  const links = document.getElementById('s-links').value.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  // Process Links from the active branch
+  const linksEl = activeBranch === 'data' ? document.getElementById('d-links') : document.getElementById('a-links');
+  const links = linksEl.value.trim().split('\n').map(l=>l.trim()).filter(Boolean);
   payload.attachments = links.map(url => ({ type:'link', url, name:url }));
 
   if (activeBranch === 'data') {
@@ -332,26 +324,18 @@ async function submitRequest() {
     if (tool === 'Other') tool = document.getElementById('a-tool-other').value.trim() || 'Other';
     
     const level = document.getElementById('a-level').value;
-    const justification = document.getElementById('a-justification').value.trim();
-    const duration = document.getElementById('a-duration').value;
-    const expiry = document.getElementById('a-expiry').value;
-    const approver = document.getElementById('a-approver').value.trim();
+    const usecase = document.getElementById('a-usecase').value.trim();
     const urgency = document.getElementById('a-urgency').value; 
 
-    if (!level || !justification || !approver || (document.getElementById('a-tool').value === 'Other' && !tool)) return alert('Please fill all required Access Request fields.');
-    if (duration === 'Temporary' && !expiry) return alert('Please select an expiry date for temporary access.');
+    if (!level || !usecase || (document.getElementById('a-tool').value === 'Other' && !tool)) return alert('Please fill all required Access Request fields.');
 
     payload.title = `Access Request: ${tool} (${level})`;
-    payload.description = justification;
+    payload.description = usecase;
     payload.priority = urgency; 
     
     payload.details = {
       tool: tool,
-      access_level: level,
-      scope: document.getElementById('a-scope').value.trim(),
-      duration: duration,
-      expiry_date: expiry,
-      approver: approver
+      access_level: level
     };
   }
 
