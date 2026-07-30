@@ -228,19 +228,20 @@ tr:hover td{background:var(--bg);}
   </aside>
 
   <main class="main">
-    <!-- TOPBAR WITH GLOBAL CATEGORY TOGGLE -->
     <div class="topbar">
-      <div style="display:flex; align-items:center; gap:20px;">
-        <div class="page-title" id="page-title">Dashboard</div>
+      <div class="page-title" id="page-title">Dashboard</div>
+    </div>
+
+    <div class="content">
+
+      <!-- GLOBAL CATEGORY TOGGLE -->
+      <div style="margin-bottom:20px; display:inline-flex;">
         <div class="view-toggle" style="background:var(--surface2)">
           <button class="view-btn active" onclick="setGlobalCategory('All', this)">All Types</button>
           <button class="view-btn" onclick="setGlobalCategory('Data Request', this)">📊 Data Requests</button>
           <button class="view-btn" onclick="setGlobalCategory('Access Request', this)">🔑 Access Requests</button>
         </div>
       </div>
-    </div>
-
-    <div class="content">
 
       <!-- DASHBOARD VIEW -->
       <div class="view-section active" id="view-dashboard">
@@ -507,7 +508,7 @@ async function deleteRequest(id) {
 // ── Render & Filters ──
 function setGlobalCategory(cat, btn) {
   globalCategory = cat;
-  document.querySelectorAll('.topbar .view-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-toggle .view-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   render();
 }
