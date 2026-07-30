@@ -17,10 +17,8 @@ const ticketBlock = (record) => {
     ['Status', record.status || 'New'],
   ];
 
-  if (record.request_category === 'Access Request') {
+if (record.request_category === 'Access Request') {
     rows.push(['Access Level', d.access_level]);
-    rows.push(['Scope', d.scope || 'All']);
-    rows.push(['Approver', d.approver]);
   } else {
     rows.push(['Impact Radius', d.blocked_audience || '—']);
     rows.push(['Delay Impact', d.delay_impact || '—']);
