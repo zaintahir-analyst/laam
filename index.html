@@ -556,13 +556,10 @@ function openDetail(id) {
   document.getElementById('det-title').textContent = t.ticket_id;
   const d = t.details || {};
   
-  let extraDetails = '';
+let extraDetails = '';
   if (t.request_category === 'Access Request') {
     extraDetails = `
       <div><div class="detail-label">Access Level</div><div class="detail-value">${esc(d.access_level)}</div></div>
-      <div><div class="detail-label">Scope/Collections</div><div class="detail-value">${esc(d.scope || 'All')}</div></div>
-      <div><div class="detail-label">Approver</div><div class="detail-value">${esc(d.approver)}</div></div>
-      <div><div class="detail-label">Duration</div><div class="detail-value">${esc(d.duration)}${d.expiry_date ? ` (Exp: ${d.expiry_date})` : ''}</div></div>
     `;
   } else {
     extraDetails = `
@@ -572,6 +569,7 @@ function openDetail(id) {
       ${d.deadline_reason ? `<div><div class="detail-label">Deadline Reason</div><div class="detail-value">${esc(d.deadline_reason)}</div></div>` : ''}
     `;
   }
+  
 
   const commentsList = typeof t.comments === 'string' ? JSON.parse(t.comments || '[]') : (t.comments || []);
   const commentsHtml = commentsList.length > 0 
@@ -588,7 +586,7 @@ function openDetail(id) {
       ${extraDetails}
     </div>
     
-    <div class="detail-label">${t.request_category === 'Access Request' ? 'Business Justification' : 'The Ask'}</div>
+    <div class="detail-label">${t.request_category === 'Access Request' ? 'Business Use Case' : 'The Ask'}</div>
     <div class="detail-value" style="margin-top:4px;line-height:1.6;white-space:pre-wrap">${esc(t.description||'—')}${d.business_case ? `\n\n<strong>Use Case:</strong>\n${esc(d.business_case)}` : ''}</div>
     ${attachmentsBlock(t.attachments)}
     
